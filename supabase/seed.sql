@@ -176,6 +176,114 @@ VALUES
   );
 
 -- =============================================================================
+-- EVENTS (Test events for each city)
+-- =============================================================================
+
+-- Create upcoming test events
+INSERT INTO events (id, city_id, title, description, slug, starts_at, ends_at, location_name, location_address, max_attendees, created_at, updated_at)
+VALUES
+  -- Adelaide upcoming event
+  (
+    'e1111111-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Community Meetup',
+    E'Join us for our monthly community meetup!\n\nWe\'ll be discussing how technology can serve the kingdom, sharing testimonies, and connecting with other tech workers in Adelaide.\n\nBring a friend! Light refreshments provided.',
+    'community-meetup',
+    (now() + interval '7 days')::timestamptz, -- Next week
+    (now() + interval '7 days 2 hours')::timestamptz,
+    'St Paul''s Church',
+    '123 Main Street, Adelaide SA 5000',
+    50,
+    now(),
+    now()
+  ),
+  -- Adelaide upcoming event 2
+  (
+    'e1111112-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Web Development Workshop',
+    E'Learn modern web development with React and Next.js!\n\nThis hands-on workshop is perfect for beginners and intermediate developers looking to level up their skills.\n\nBring your laptop.',
+    'web-dev-workshop',
+    (now() + interval '14 days')::timestamptz, -- Two weeks from now
+    (now() + interval '14 days 3 hours')::timestamptz,
+    'TechHub Adelaide',
+    '456 Tech St, Adelaide SA 5000',
+    25,
+    now(),
+    now()
+  ),
+  -- Sydney upcoming event
+  (
+    'e2222221-2222-2222-2222-222222222222',
+    'c2222222-2222-2222-2222-222222222222',
+    'Prayer & Worship Night',
+    E'Join us for an evening of prayer and worship focused on tech workers in Sydney.\n\nWe\'ll pray for breakthrough in the tech industry and for God\'s kingdom to advance through technology.',
+    'prayer-worship-night',
+    (now() + interval '10 days')::timestamptz,
+    (now() + interval '10 days 2 hours')::timestamptz,
+    'Hillsong City Campus',
+    '789 George St, Sydney NSW 2000',
+    NULL, -- Unlimited capacity
+    now(),
+    now()
+  ),
+  -- Melbourne upcoming event
+  (
+    'e3333331-3333-3333-3333-333333333333',
+    'c3333333-3333-3333-3333-333333333333',
+    'AI & Ethics Roundtable',
+    E'A thoughtful discussion on artificial intelligence and Christian ethics.\n\nFeaturing guest speakers from leading tech companies and theological institutions.\n\nQ&A session included.',
+    'ai-ethics-roundtable',
+    (now() + interval '21 days')::timestamptz,
+    (now() + interval '21 days 3 hours')::timestamptz,
+    'Melbourne Convention Centre',
+    '1 Convention Centre Pl, South Wharf VIC 3006',
+    100,
+    now(),
+    now()
+  ),
+  -- Adelaide past event (for testing)
+  (
+    'e1111113-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Launch Event',
+    E'Our inaugural FaithTech Adelaide launch event!\n\nIt was amazing to see 80+ tech workers gather to worship, network, and envision how God can use technology for His glory.',
+    'launch-event',
+    (now() - interval '30 days')::timestamptz, -- Last month
+    (now() - interval '30 days 3 hours')::timestamptz,
+    'St Paul''s Church',
+    '123 Main Street, Adelaide SA 5000',
+    NULL,
+    now() - interval '45 days',
+    now() - interval '45 days'
+  );
+
+-- =============================================================================
+-- EVENT RSVPs (Test RSVPs)
+-- =============================================================================
+
+-- Note: Uncomment after creating test users and updating UUIDs
+/*
+INSERT INTO event_rsvps (event_id, user_id, status, created_at)
+VALUES
+  -- Adelaide Community Meetup RSVPs
+  ('e1111111-1111-1111-1111-111111111111', 'REPLACE-WITH-ADELAIDE-ADMIN-UUID', 'yes', now()),
+  ('e1111111-1111-1111-1111-111111111111', 'REPLACE-WITH-MEMBER-UUID', 'yes', now()),
+  ('e1111111-1111-1111-1111-111111111111', 'REPLACE-WITH-SUPER-ADMIN-UUID', 'maybe', now()),
+
+  -- Web Dev Workshop RSVPs
+  ('e1111112-1111-1111-1111-111111111111', 'REPLACE-WITH-MEMBER-UUID', 'yes', now()),
+
+  -- Sydney Prayer Night RSVPs
+  ('e2222221-2222-2222-2222-222222222222', 'REPLACE-WITH-SYDNEY-ADMIN-UUID', 'yes', now()),
+  ('e2222221-2222-2222-2222-222222222222', 'REPLACE-WITH-SUPER-ADMIN-UUID', 'yes', now()),
+
+  -- Adelaide Launch Event (past event) RSVPs
+  ('e1111113-1111-1111-1111-111111111111', 'REPLACE-WITH-ADELAIDE-ADMIN-UUID', 'yes', now() - interval '35 days'),
+  ('e1111113-1111-1111-1111-111111111111', 'REPLACE-WITH-MEMBER-UUID', 'yes', now() - interval '35 days');
+*/
+
+-- =============================================================================
 -- VERIFICATION QUERIES
 -- =============================================================================
 
@@ -204,6 +312,24 @@ VALUES
 -- FROM groups g
 -- JOIN cities c ON c.id = g.city_id
 -- ORDER BY c.name, g.name;
+
+-- Check events
+-- SELECT
+--   e.*,
+--   c.name as city_name
+-- FROM events e
+-- JOIN cities c ON c.id = e.city_id
+-- ORDER BY e.starts_at DESC;
+
+-- Check event RSVPs
+-- SELECT
+--   er.*,
+--   e.title as event_title,
+--   p.display_name as user_name
+-- FROM event_rsvps er
+-- JOIN events e ON e.id = er.event_id
+-- JOIN profiles p ON p.id = er.user_id
+-- ORDER BY e.title, er.status;
 
 -- =============================================================================
 -- NOTES FOR TESTING RLS POLICIES

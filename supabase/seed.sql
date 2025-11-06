@@ -284,6 +284,139 @@ VALUES
 */
 
 -- =============================================================================
+-- PROJECTS (Test projects for each city)
+-- =============================================================================
+
+-- Create test projects showcasing CREATE hackathon and tech-for-good work
+INSERT INTO projects (id, city_id, title, description, slug, problem_statement, solution, github_url, demo_url, image_url, is_featured, created_at, updated_at)
+VALUES
+  -- Adelaide featured project
+  (
+    'p1111111-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Prayer Connect',
+    E'A mobile app that helps Christians discover and share prayer requests in their local community.\n\nBuilt during FaithTech CREATE Adelaide 2024, this app connects believers to pray for one another in real-time.',
+    'prayer-connect',
+    'Many Christians struggle to stay connected to their community''s prayer needs. Prayer requests often get lost in group chats or forgotten after Sunday services.',
+    'Prayer Connect provides a centralized platform where church members can post, discover, and pray for requests in real-time. Users can mark requests as "prayed for" and receive notifications when someone prays for their request.',
+    'https://github.com/faithtech-adelaide/prayer-connect',
+    'https://prayer-connect.faithtech.au',
+    NULL,
+    true, -- Featured project
+    now() - interval '45 days',
+    now() - interval '10 days'
+  ),
+  -- Adelaide regular project
+  (
+    'p1111112-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Scripture Memory Game',
+    E'An interactive web game to help kids and adults memorize Bible verses through gamification.\n\nFeatures include: daily challenges, progress tracking, and social sharing.',
+    'scripture-memory-game',
+    'Many people want to memorize Scripture but find traditional methods boring or hard to stick with long-term.',
+    'We gamified Scripture memorization with daily challenges, streaks, achievements, and friendly competition. Users earn points by correctly reciting verses and can challenge friends.',
+    'https://github.com/faithtech-adelaide/scripture-game',
+    'https://scripturegame.app',
+    NULL,
+    false,
+    now() - interval '30 days',
+    now() - interval '30 days'
+  ),
+  -- Sydney featured project
+  (
+    'p2222221-2222-2222-2222-222222222222',
+    'c2222222-2222-2222-2222-222222222222',
+    'Sermon Notes AI',
+    E'AI-powered sermon note-taking app that automatically generates summaries and action items from sermon audio.\n\nWinner of CREATE Sydney 2024!',
+    'sermon-notes-ai',
+    'It''s hard to take good notes during sermons while actively listening. Many people forget key points by the time they get home.',
+    'Using speech-to-text and GPT-4, our app automatically transcribes sermons and generates concise summaries, key takeaways, and suggested action items. Users can review and share notes with their small group.',
+    'https://github.com/faithtech-sydney/sermon-notes-ai',
+    'https://sermonnotes.ai',
+    NULL,
+    true, -- Featured project
+    now() - interval '60 days',
+    now() - interval '20 days'
+  ),
+  -- Sydney regular project
+  (
+    'p2222222-2222-2222-2222-222222222222',
+    'c2222222-2222-2222-2222-222222222222',
+    'Church Volunteer Scheduler',
+    E'Simplify volunteer coordination for churches with automated scheduling and shift reminders.\n\nNo more spreadsheet chaos!',
+    'volunteer-scheduler',
+    'Churches rely on volunteers but coordinating schedules via email and spreadsheets is time-consuming and error-prone.',
+    'Our web app allows church admins to create volunteer roles and shifts, while volunteers can sign up, swap shifts, and receive automated reminders. Integration with Google Calendar keeps everyone in sync.',
+    'https://github.com/faithtech-sydney/volunteer-scheduler',
+    NULL, -- No demo URL yet
+    NULL,
+    false,
+    now() - interval '20 days',
+    now() - interval '15 days'
+  ),
+  -- Melbourne featured project
+  (
+    'p3333331-3333-3333-3333-333333333333',
+    'c3333333-3333-3333-3333-333333333333',
+    'Bible Study Companion',
+    E'An interactive Bible study tool with AI-powered insights, cross-references, and discussion questions.\n\nHelping small groups go deeper in God''s Word.',
+    'bible-study-companion',
+    'Small group leaders spend hours preparing Bible study materials, and it''s hard to find quality questions and cross-references quickly.',
+    'Our app analyzes any Bible passage and generates contextual insights, historical background, cross-references, and discussion questions. Leaders can customize and export study guides in minutes.',
+    'https://github.com/faithtech-melbourne/bible-study-companion',
+    'https://biblestudycompanion.com',
+    NULL,
+    true, -- Featured project
+    now() - interval '90 days',
+    now() - interval '30 days'
+  ),
+  -- Melbourne regular project
+  (
+    'p3333332-3333-3333-3333-333333333333',
+    'c3333333-3333-3333-3333-333333333333',
+    'Faith & Finance Tracker',
+    E'A budgeting app designed for Christians, with features for tithing tracking, generosity goals, and biblical financial principles.\n\nMoney management with kingdom priorities.',
+    'faith-finance-tracker',
+    'Generic budgeting apps don''t reflect Christian values like tithing, generosity, and stewardship. Many believers want to honor God with their finances but lack the right tools.',
+    'Faith & Finance Tracker includes dedicated tithing categories, generosity goal tracking, and devotional content on biblical financial principles. Users can see their giving impact and plan for kingdom generosity.',
+    'https://github.com/faithtech-melbourne/faith-finance',
+    NULL,
+    NULL,
+    false,
+    now() - interval '15 days',
+    now() - interval '10 days'
+  );
+
+-- =============================================================================
+-- PROJECT MEMBERS (Test team members for projects)
+-- =============================================================================
+
+-- Note: Uncomment after creating test users and updating UUIDs
+/*
+INSERT INTO project_members (project_id, user_id, role, created_at)
+VALUES
+  -- Prayer Connect team (Adelaide)
+  ('p1111111-1111-1111-1111-111111111111', 'REPLACE-WITH-ADELAIDE-ADMIN-UUID', 'lead', now() - interval '45 days'),
+  ('p1111111-1111-1111-1111-111111111111', 'REPLACE-WITH-MEMBER-UUID', 'contributor', now() - interval '45 days'),
+
+  -- Scripture Memory Game team (Adelaide)
+  ('p1111112-1111-1111-1111-111111111111', 'REPLACE-WITH-MEMBER-UUID', 'lead', now() - interval '30 days'),
+
+  -- Sermon Notes AI team (Sydney)
+  ('p2222221-2222-2222-2222-222222222222', 'REPLACE-WITH-SYDNEY-ADMIN-UUID', 'lead', now() - interval '60 days'),
+  ('p2222221-2222-2222-2222-222222222222', 'REPLACE-WITH-SUPER-ADMIN-UUID', 'contributor', now() - interval '60 days'),
+
+  -- Church Volunteer Scheduler team (Sydney)
+  ('p2222222-2222-2222-2222-222222222222', 'REPLACE-WITH-SYDNEY-ADMIN-UUID', 'lead', now() - interval '20 days'),
+
+  -- Bible Study Companion team (Melbourne)
+  ('p3333331-3333-3333-3333-333333333333', 'REPLACE-WITH-SUPER-ADMIN-UUID', 'lead', now() - interval '90 days'),
+
+  -- Faith & Finance Tracker (Melbourne - solo project, no team members)
+  ('p3333332-3333-3333-3333-333333333333', 'REPLACE-WITH-SUPER-ADMIN-UUID', 'lead', now() - interval '15 days');
+*/
+
+-- =============================================================================
 -- VERIFICATION QUERIES
 -- =============================================================================
 
@@ -330,6 +463,24 @@ VALUES
 -- JOIN events e ON e.id = er.event_id
 -- JOIN profiles p ON p.id = er.user_id
 -- ORDER BY e.title, er.status;
+
+-- Check projects
+-- SELECT
+--   pr.*,
+--   c.name as city_name
+-- FROM projects pr
+-- JOIN cities c ON c.id = pr.city_id
+-- ORDER BY pr.is_featured DESC, c.name, pr.created_at DESC;
+
+-- Check project members (after uncommenting and adding real UUIDs)
+-- SELECT
+--   pm.*,
+--   pr.title as project_title,
+--   p.display_name as user_name
+-- FROM project_members pm
+-- JOIN projects pr ON pr.id = pm.project_id
+-- JOIN profiles p ON p.id = pm.user_id
+-- ORDER BY pr.title, pm.role;
 
 -- =============================================================================
 -- NOTES FOR TESTING RLS POLICIES

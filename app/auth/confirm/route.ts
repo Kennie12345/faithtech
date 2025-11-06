@@ -1,3 +1,31 @@
+/**
+ * Email Confirmation Route Handler
+ *
+ * PURPOSE: Verify user email and complete sign-up flow using Supabase OTP
+ *
+ * FLOW:
+ * 1. User signs up → Supabase sends email with magic link
+ * 2. User clicks link → Redirects to this route with token_hash & type
+ * 3. This route verifies OTP token with Supabase
+ * 4. Create user profile if new signup
+ * 5. Emit 'user:created' event for other features to react
+ * 6. Redirect to app (authenticated)
+ *
+ * WHY PROFILE CREATION HERE:
+ * - Supabase auth creates user in auth.users automatically
+ * - We need to create matching record in public.profiles table
+ * - This is the single point where we know user is newly created
+ * - Profile row is needed for RLS policies and user features
+ *
+ * ERROR HANDLING:
+ * - Invalid/expired tokens → redirect to /auth/error
+ * - Profile creation failure → redirect to /auth/error
+ * - User sees friendly error message, not raw error
+ *
+ * @see /app/auth/sign-up/page.tsx - Where users start signup
+ * @see /lib/core/events.ts - Event system for 'user:created' event
+ */
+
 import { createClient } from "@/lib/supabase/server";
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";

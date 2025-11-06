@@ -1,3 +1,31 @@
+/**
+ * Supabase Session Update for Middleware
+ *
+ * Handles automatic session refresh on every request using Supabase SSR pattern.
+ * This is called by /middleware.ts on EVERY incoming request.
+ *
+ * AUTHENTICATION FLOW:
+ * 1. Request arrives → Middleware calls updateSession()
+ * 2. Create Supabase client with access to request cookies
+ * 3. Call auth.getClaims() to refresh JWT if needed
+ * 4. Update response cookies with refreshed session
+ * 5. Check if route requires authentication → redirect if needed
+ * 6. Return response with fresh session cookies
+ *
+ * WHY THIS PATTERN:
+ * - Supabase JWTs expire after 1 hour
+ * - Middleware runs on EVERY request, keeping sessions fresh automatically
+ * - Server Components then read the fresh session from cookies
+ * - Prevents "random logouts" that happen with expired JWTs
+ *
+ * CRITICAL: Do NOT modify response cookies outside this function!
+ * Modifying cookies incorrectly can cause browser/server session mismatch.
+ *
+ * @param request - Next.js request object
+ * @returns Response with refreshed auth cookies
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
+
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";

@@ -1,3 +1,19 @@
+/**
+ * Home Page (Landing Page)
+ *
+ * PURPOSE: Welcome users and guide them through initial setup
+ *
+ * CONDITIONAL RENDERING:
+ * - If env vars NOT set: Show Supabase connection steps (hasEnvVars = false)
+ * - If env vars set: Show sign-up tutorial (hasEnvVars = true)
+ *
+ * This is a public route - no authentication required.
+ * Users can navigate to /auth/login or /auth/sign-up from navigation.
+ *
+ * NOTE: This is the starter template homepage.
+ * For FaithTech Hub, this will be replaced with city selection or homepage.
+ */
+
 import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";

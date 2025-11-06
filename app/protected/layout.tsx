@@ -1,3 +1,37 @@
+/**
+ * Protected Routes Layout
+ *
+ * PURPOSE: Provides navigation and footer for authenticated pages
+ *
+ * WHEN THIS APPLIES:
+ * All routes under /protected/* use this layout automatically.
+ * This includes admin pages, user dashboards, and authenticated features.
+ *
+ * ARCHITECTURAL PATTERN: Layout Nesting
+ * - Root layout (/app/layout.tsx) → provides theme, fonts, metadata
+ * - This layout → adds navigation + footer for authenticated sections
+ * - Route-specific layouts can nest further (e.g., /protected/admin/layout.tsx)
+ *
+ * AUTHENTICATION:
+ * - Middleware (/middleware.ts) runs BEFORE this layout renders
+ * - Middleware redirects unauthenticated users to /auth/login
+ * - Therefore, we can assume user IS authenticated when this renders
+ * - AuthButton component handles displaying user info + logout
+ *
+ * COMPONENTS EXPLAINED:
+ * - <EnvVarWarning />: Shows banner if Supabase env vars missing (setup helper)
+ * - <AuthButton />: Shows user email + logout button (only if authenticated)
+ * - <DeployButton />: Quick link to deploy on Vercel (can remove for production)
+ * - <ThemeSwitcher />: Toggle dark/light mode
+ *
+ * LAYOUT STRUCTURE:
+ * Navigation (nav) → Content (children) → Footer
+ * All constrained to max-w-5xl for consistent page width
+ *
+ * @see /middleware.ts - Protects these routes by checking auth
+ * @see /app/layout.tsx - Root layout that wraps this
+ */
+
 import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";

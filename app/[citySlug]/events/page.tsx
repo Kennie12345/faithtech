@@ -1,6 +1,27 @@
 /**
  * Public Events List Page
- * Shows upcoming events for a city
+ *
+ * PURPOSE: Display upcoming events for a specific city
+ *
+ * ROUTE PATTERN: /[citySlug]/events
+ * Example: /adelaide/events, /sydney/events
+ *
+ * MULTI-TENANCY:
+ * - Dynamic [citySlug] route param identifies which city's events to show
+ * - RLS policies in database ensure we only fetch events for this city
+ * - Each city has isolated events (Adelaide can't see Sydney's events)
+ *
+ * DATA FETCHING:
+ * 1. getCityBySlug() → Validate city exists, get city data
+ * 2. getEvents(cityId, upcomingOnly=true) → Fetch future events only
+ * 3. Server Component = Fast, SEO-friendly, no client JS needed
+ *
+ * ERROR HANDLING:
+ * - Invalid city slug → notFound() → Shows 404 page
+ *
+ * @see /features/events/actions.ts - getEvents implementation
+ * @see /lib/core/api.ts - getCityBySlug implementation
+ * @see docs/2-core-architecture/multi-tenant-data-model.md
  */
 
 import { notFound } from 'next/navigation';

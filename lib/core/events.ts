@@ -46,6 +46,7 @@ export type EventName =
   | 'project:submitted'
   | 'project:approved'
   | 'project:updated'
+  | 'project:deleted'
   | 'project:featured'
   | 'project:unfeatured'
   // Blog events
@@ -84,7 +85,8 @@ export interface EventPayloads {
   'project:submitted': { projectId: string; cityId: string; createdBy: string };
   'project:approved': { projectId: string; cityId: string; approvedBy: string };
   'project:updated': { projectId: string; cityId: string; updatedBy: string };
-  'project:featured': { projectId: string; cityId: string };
+  'project:deleted': { projectId: string; cityId: string; deletedBy: string };
+  'project:featured': { projectId: string; cityId: string; featuredBy: string };
   'project:unfeatured': { projectId: string; cityId: string };
 
   // Blog events

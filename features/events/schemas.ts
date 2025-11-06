@@ -8,8 +8,8 @@ import { z } from 'zod';
 // RSVP status enum
 export const rsvpStatusSchema = z.enum(['yes', 'no', 'maybe']);
 
-// Create event schema (for admin forms)
-export const createEventSchema = z.object({
+// Base event schema (without refinements)
+const baseEventSchema = z.object({
   title: z
     .string()
     .min(1, 'Title is required')
@@ -66,7 +66,10 @@ export const createEventSchema = z.object({
     .positive('Max attendees must be greater than 0')
     .optional()
     .nullable(),
-}).refine(
+});
+
+// Create event schema (for admin forms) - adds cross-field validation
+export const createEventSchema = baseEventSchema.refine(
   (data) => {
     // If ends_at is provided, it must be after starts_at
     if (data.ends_at && data.starts_at) {
@@ -80,8 +83,8 @@ export const createEventSchema = z.object({
   }
 );
 
-// Update event schema (partial of create schema)
-export const updateEventSchema = createEventSchema.partial();
+// Update event schema (partial of base schema)
+export const updateEventSchema = baseEventSchema.partial();
 
 // RSVP schema
 export const createRSVPSchema = z.object({

@@ -10,51 +10,55 @@
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: Members of a city can see projects in that city
+DROP POLICY IF EXISTS "Projects visible to city members" ON projects;
 CREATE POLICY "Projects visible to city members"
   ON projects
   FOR SELECT
   TO authenticated
   USING (
-    city_id = auth.current_city()
-    OR auth.is_super_admin()
+    city_id = public.current_city()
+    OR public.is_super_admin()
   );
 
 -- INSERT: Any authenticated member can submit projects
 -- This differs from events where only admins can create
+DROP POLICY IF EXISTS "Projects insertable by city members" ON projects;
 CREATE POLICY "Projects insertable by city members"
   ON projects
   FOR INSERT
   TO authenticated
   WITH CHECK (
-    city_id = auth.current_city()
+    city_id = public.current_city()
     AND created_by = auth.uid()
   );
 
 -- UPDATE: Project creator OR city admin can edit
 -- This allows members to edit their own submissions
+DROP POLICY IF EXISTS "Projects updatable by creator or admin" ON projects;
 CREATE POLICY "Projects updatable by creator or admin"
   ON projects
   FOR UPDATE
   TO authenticated
   USING (
-    auth.is_super_admin()
+    public.is_super_admin()
     OR created_by = auth.uid()
-    OR auth.user_role(city_id) IN ('city_admin', 'super_admin')
+    OR public.user_role(city_id) IN ('city_admin', 'super_admin')
   )
   WITH CHECK (
-    auth.is_super_admin()
+    public.is_super_admin()
     OR created_by = auth.uid()
-    OR auth.user_role(city_id) IN ('city_admin', 'super_admin')
+    OR public.user_role(city_id) IN ('city_admin', 'super_admin')
   );
 
 -- DELETE: City admins only (members cannot delete their own projects)
+DROP POLICY IF EXISTS "Projects deletable by city admin" ON projects;
 CREATE POLICY "Projects deletable by city admin"
   ON projects
   FOR DELETE
   TO authenticated
   USING (
-    auth.is_super_admin()
-    OR auth.user_role(city_id) IN ('city_admin', 'super_admin')
+    public.is_super_admin()
+    OR public.user_role(city_id) IN ('city_admin', 'super_admin')
   );
 
 -- =============================================================================

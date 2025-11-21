@@ -10,6 +10,7 @@
 ALTER TABLE project_members ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: Everyone can see project team members (needed for public project pages)
+DROP POLICY IF EXISTS "Project members visible to everyone" ON project_members;
 CREATE POLICY "Project members visible to everyone"
   ON project_members
   FOR SELECT
@@ -17,6 +18,7 @@ CREATE POLICY "Project members visible to everyone"
   USING (true);
 
 -- INSERT: Project creator OR city admin can add team members
+DROP POLICY IF EXISTS "Project members insertable by project creator or admin" ON project_members;
 CREATE POLICY "Project members insertable by project creator or admin"
   ON project_members
   FOR INSERT
@@ -28,13 +30,14 @@ CREATE POLICY "Project members insertable by project creator or admin"
       WHERE projects.id = project_members.project_id
         AND (
           projects.created_by = auth.uid()
-          OR auth.is_super_admin()
-          OR auth.user_role(projects.city_id) IN ('city_admin', 'super_admin')
+          OR public.is_super_admin()
+          OR public.user_role(projects.city_id) IN ('city_admin', 'super_admin')
         )
     )
   );
 
 -- UPDATE: Project creator OR city admin can update team member roles
+DROP POLICY IF EXISTS "Project members updatable by project creator or admin" ON project_members;
 CREATE POLICY "Project members updatable by project creator or admin"
   ON project_members
   FOR UPDATE
@@ -46,8 +49,8 @@ CREATE POLICY "Project members updatable by project creator or admin"
       WHERE projects.id = project_members.project_id
         AND (
           projects.created_by = auth.uid()
-          OR auth.is_super_admin()
-          OR auth.user_role(projects.city_id) IN ('city_admin', 'super_admin')
+          OR public.is_super_admin()
+          OR public.user_role(projects.city_id) IN ('city_admin', 'super_admin')
         )
     )
   )
@@ -58,13 +61,14 @@ CREATE POLICY "Project members updatable by project creator or admin"
       WHERE projects.id = project_members.project_id
         AND (
           projects.created_by = auth.uid()
-          OR auth.is_super_admin()
-          OR auth.user_role(projects.city_id) IN ('city_admin', 'super_admin')
+          OR public.is_super_admin()
+          OR public.user_role(projects.city_id) IN ('city_admin', 'super_admin')
         )
     )
   );
 
 -- DELETE: Project creator OR city admin can remove team members
+DROP POLICY IF EXISTS "Project members deletable by project creator or admin" ON project_members;
 CREATE POLICY "Project members deletable by project creator or admin"
   ON project_members
   FOR DELETE
@@ -76,8 +80,8 @@ CREATE POLICY "Project members deletable by project creator or admin"
       WHERE projects.id = project_members.project_id
         AND (
           projects.created_by = auth.uid()
-          OR auth.is_super_admin()
-          OR auth.user_role(projects.city_id) IN ('city_admin', 'super_admin')
+          OR public.is_super_admin()
+          OR public.user_role(projects.city_id) IN ('city_admin', 'super_admin')
         )
     )
   );

@@ -5,8 +5,8 @@
 
 -- Projects table: Community project showcases (CREATE hackathons, tech-for-good initiatives)
 -- Isolated per city via city_id foreign key
-CREATE TABLE projects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS projects (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   city_id UUID NOT NULL REFERENCES cities(id) ON DELETE CASCADE,
 
   -- Project details
@@ -36,18 +36,19 @@ CREATE TABLE projects (
 );
 
 -- Index for city-based queries (most common filter)
-CREATE INDEX projects_city_idx ON projects(city_id);
+CREATE INDEX IF NOT EXISTS projects_city_idx ON projects(city_id);
 
 -- Index for featured projects (homepage queries)
-CREATE INDEX projects_featured_idx ON projects(city_id, is_featured, created_at DESC);
+CREATE INDEX IF NOT EXISTS projects_featured_idx ON projects(city_id, is_featured, created_at DESC);
 
 -- Index for slug lookups
-CREATE INDEX projects_slug_idx ON projects(slug);
+CREATE INDEX IF NOT EXISTS projects_slug_idx ON projects(slug);
 
 -- Index for creator queries
-CREATE INDEX projects_created_by_idx ON projects(created_by);
+CREATE INDEX IF NOT EXISTS projects_created_by_idx ON projects(created_by);
 
 -- Trigger: Auto-update updated_at timestamp
+DROP TRIGGER IF EXISTS projects_updated_at ON projects;
 CREATE TRIGGER projects_updated_at
   BEFORE UPDATE ON projects
   FOR EACH ROW

@@ -73,6 +73,7 @@ VALUES (
 
 -- CITY LOGOS
 -- SELECT: Public (anyone can view logos)
+DROP POLICY IF EXISTS "City logos are publicly accessible" ON storage.objects;
 CREATE POLICY "City logos are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -80,37 +81,41 @@ CREATE POLICY "City logos are publicly accessible"
   USING (bucket_id = 'city-logos');
 
 -- INSERT: Super admin only
+DROP POLICY IF EXISTS "City logos uploadable by super admin" ON storage.objects;
 CREATE POLICY "City logos uploadable by super admin"
   ON storage.objects
   FOR INSERT
   TO authenticated
   WITH CHECK (
     bucket_id = 'city-logos'
-    AND auth.is_super_admin()
+    AND public.is_super_admin()
   );
 
 -- UPDATE: Super admin only
+DROP POLICY IF EXISTS "City logos updatable by super admin" ON storage.objects;
 CREATE POLICY "City logos updatable by super admin"
   ON storage.objects
   FOR UPDATE
   TO authenticated
   USING (
     bucket_id = 'city-logos'
-    AND auth.is_super_admin()
+    AND public.is_super_admin()
   );
 
 -- DELETE: Super admin only
+DROP POLICY IF EXISTS "City logos deletable by super admin" ON storage.objects;
 CREATE POLICY "City logos deletable by super admin"
   ON storage.objects
   FOR DELETE
   TO authenticated
   USING (
     bucket_id = 'city-logos'
-    AND auth.is_super_admin()
+    AND public.is_super_admin()
   );
 
 -- CITY HEROES
 -- SELECT: Public
+DROP POLICY IF EXISTS "City heroes are publicly accessible" ON storage.objects;
 CREATE POLICY "City heroes are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -118,6 +123,7 @@ CREATE POLICY "City heroes are publicly accessible"
   USING (bucket_id = 'city-heroes');
 
 -- INSERT: City admin or super admin
+DROP POLICY IF EXISTS "City heroes uploadable by city admin" ON storage.objects;
 CREATE POLICY "City heroes uploadable by city admin"
   ON storage.objects
   FOR INSERT
@@ -125,12 +131,13 @@ CREATE POLICY "City heroes uploadable by city admin"
   WITH CHECK (
     bucket_id = 'city-heroes'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- UPDATE: City admin or super admin
+DROP POLICY IF EXISTS "City heroes updatable by city admin" ON storage.objects;
 CREATE POLICY "City heroes updatable by city admin"
   ON storage.objects
   FOR UPDATE
@@ -138,12 +145,13 @@ CREATE POLICY "City heroes updatable by city admin"
   USING (
     bucket_id = 'city-heroes'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- DELETE: City admin or super admin
+DROP POLICY IF EXISTS "City heroes deletable by city admin" ON storage.objects;
 CREATE POLICY "City heroes deletable by city admin"
   ON storage.objects
   FOR DELETE
@@ -151,13 +159,14 @@ CREATE POLICY "City heroes deletable by city admin"
   USING (
     bucket_id = 'city-heroes'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- AVATARS
 -- SELECT: Public
+DROP POLICY IF EXISTS "Avatars are publicly accessible" ON storage.objects;
 CREATE POLICY "Avatars are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -165,6 +174,7 @@ CREATE POLICY "Avatars are publicly accessible"
   USING (bucket_id = 'avatars');
 
 -- INSERT: Users can upload their own avatar (path must match user ID)
+DROP POLICY IF EXISTS "Avatars uploadable by owner" ON storage.objects;
 CREATE POLICY "Avatars uploadable by owner"
   ON storage.objects
   FOR INSERT
@@ -175,6 +185,7 @@ CREATE POLICY "Avatars uploadable by owner"
   );
 
 -- UPDATE: Users can update their own avatar
+DROP POLICY IF EXISTS "Avatars updatable by owner" ON storage.objects;
 CREATE POLICY "Avatars updatable by owner"
   ON storage.objects
   FOR UPDATE
@@ -185,6 +196,7 @@ CREATE POLICY "Avatars updatable by owner"
   );
 
 -- DELETE: Users can delete their own avatar
+DROP POLICY IF EXISTS "Avatars deletable by owner" ON storage.objects;
 CREATE POLICY "Avatars deletable by owner"
   ON storage.objects
   FOR DELETE
@@ -196,6 +208,7 @@ CREATE POLICY "Avatars deletable by owner"
 
 -- PROJECT IMAGES
 -- SELECT: Public
+DROP POLICY IF EXISTS "Project images are publicly accessible" ON storage.objects;
 CREATE POLICY "Project images are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -203,6 +216,7 @@ CREATE POLICY "Project images are publicly accessible"
   USING (bucket_id = 'project-images');
 
 -- INSERT: Any authenticated user (for project submissions)
+DROP POLICY IF EXISTS "Project images uploadable by authenticated users" ON storage.objects;
 CREATE POLICY "Project images uploadable by authenticated users"
   ON storage.objects
   FOR INSERT
@@ -210,6 +224,7 @@ CREATE POLICY "Project images uploadable by authenticated users"
   WITH CHECK (bucket_id = 'project-images');
 
 -- UPDATE: Owner or city admin
+DROP POLICY IF EXISTS "Project images updatable by owner or admin" ON storage.objects;
 CREATE POLICY "Project images updatable by owner or admin"
   ON storage.objects
   FOR UPDATE
@@ -218,12 +233,13 @@ CREATE POLICY "Project images updatable by owner or admin"
     bucket_id = 'project-images'
     AND (
       (storage.foldername(name))[1] = auth.uid()::text
-      OR auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      OR public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- DELETE: Owner or city admin
+DROP POLICY IF EXISTS "Project images deletable by owner or admin" ON storage.objects;
 CREATE POLICY "Project images deletable by owner or admin"
   ON storage.objects
   FOR DELETE
@@ -232,13 +248,14 @@ CREATE POLICY "Project images deletable by owner or admin"
     bucket_id = 'project-images'
     AND (
       (storage.foldername(name))[1] = auth.uid()::text
-      OR auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      OR public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- BLOG IMAGES
 -- SELECT: Public
+DROP POLICY IF EXISTS "Blog images are publicly accessible" ON storage.objects;
 CREATE POLICY "Blog images are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -246,6 +263,7 @@ CREATE POLICY "Blog images are publicly accessible"
   USING (bucket_id = 'blog-images');
 
 -- INSERT: City admin only (blog authors)
+DROP POLICY IF EXISTS "Blog images uploadable by city admin" ON storage.objects;
 CREATE POLICY "Blog images uploadable by city admin"
   ON storage.objects
   FOR INSERT
@@ -253,12 +271,13 @@ CREATE POLICY "Blog images uploadable by city admin"
   WITH CHECK (
     bucket_id = 'blog-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- UPDATE: City admin only
+DROP POLICY IF EXISTS "Blog images updatable by city admin" ON storage.objects;
 CREATE POLICY "Blog images updatable by city admin"
   ON storage.objects
   FOR UPDATE
@@ -266,12 +285,13 @@ CREATE POLICY "Blog images updatable by city admin"
   USING (
     bucket_id = 'blog-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- DELETE: City admin only
+DROP POLICY IF EXISTS "Blog images deletable by city admin" ON storage.objects;
 CREATE POLICY "Blog images deletable by city admin"
   ON storage.objects
   FOR DELETE
@@ -279,13 +299,14 @@ CREATE POLICY "Blog images deletable by city admin"
   USING (
     bucket_id = 'blog-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- OG IMAGES
 -- SELECT: Public (must be accessible to social media crawlers)
+DROP POLICY IF EXISTS "OG images are publicly accessible" ON storage.objects;
 CREATE POLICY "OG images are publicly accessible"
   ON storage.objects
   FOR SELECT
@@ -293,6 +314,7 @@ CREATE POLICY "OG images are publicly accessible"
   USING (bucket_id = 'og-images');
 
 -- INSERT: City admin or automated generation
+DROP POLICY IF EXISTS "OG images uploadable by city admin" ON storage.objects;
 CREATE POLICY "OG images uploadable by city admin"
   ON storage.objects
   FOR INSERT
@@ -300,12 +322,13 @@ CREATE POLICY "OG images uploadable by city admin"
   WITH CHECK (
     bucket_id = 'og-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- UPDATE: City admin only
+DROP POLICY IF EXISTS "OG images updatable by city admin" ON storage.objects;
 CREATE POLICY "OG images updatable by city admin"
   ON storage.objects
   FOR UPDATE
@@ -313,12 +336,13 @@ CREATE POLICY "OG images updatable by city admin"
   USING (
     bucket_id = 'og-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
 -- DELETE: City admin only
+DROP POLICY IF EXISTS "OG images deletable by city admin" ON storage.objects;
 CREATE POLICY "OG images deletable by city admin"
   ON storage.objects
   FOR DELETE
@@ -326,8 +350,8 @@ CREATE POLICY "OG images deletable by city admin"
   USING (
     bucket_id = 'og-images'
     AND (
-      auth.is_super_admin()
-      OR auth.user_role(auth.current_city()) IN ('city_admin', 'super_admin')
+      public.is_super_admin()
+      OR public.user_role(public.current_city()) IN ('city_admin', 'super_admin')
     )
   );
 
@@ -359,6 +383,3 @@ CREATE POLICY "OG images deletable by city admin"
 -- COMMENTS
 -- =============================================================================
 
-COMMENT ON COLUMN storage.buckets.public IS 'Public buckets have URLs accessible without auth (needed for images in public pages)';
-COMMENT ON COLUMN storage.buckets.file_size_limit IS 'Max file size in bytes (enforced at upload time)';
-COMMENT ON COLUMN storage.buckets.allowed_mime_types IS 'Restrict uploads to specific file types for security';

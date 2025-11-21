@@ -28,11 +28,15 @@ import type {
  * Get all events for a city
  * @param cityId - Optional city ID (defaults to current city)
  * @param upcomingOnly - Filter to only show upcoming events
+ * @param featuredOnly - Filter to only show featured events
+ * @param limit - Optional limit on number of results
  * @returns Array of events with RSVP counts
  */
 export async function getEvents(
   cityId?: string,
-  upcomingOnly: boolean = false
+  upcomingOnly: boolean = false,
+  featuredOnly: boolean = false,
+  limit?: number
 ): Promise<EventWithCounts[]> {
   const supabase = await createClient();
   const targetCityId = cityId || (await getCurrentCityId());
@@ -58,6 +62,14 @@ export async function getEvents(
 
   if (upcomingOnly) {
     query = query.gte('starts_at', new Date().toISOString());
+  }
+
+  if (featuredOnly) {
+    query = query.eq('is_featured', true);
+  }
+
+  if (limit) {
+    query = query.limit(limit);
   }
 
   const { data, error } = await query;

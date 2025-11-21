@@ -28,7 +28,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getCityBySlug } from '@/lib/core/api';
 import { getEvents } from '@/features/events/actions';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BeigeContentCard, Container, Section, Grid } from '@/components/design-system';
 import { CalendarIcon, MapPinIcon, UsersIcon } from 'lucide-react';
 
 interface PageProps {
@@ -49,38 +49,38 @@ export default async function CityEventsPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Upcoming Events in {city.name}
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Join us for community gatherings, workshops, and more
-          </p>
-        </div>
+      <Section spacing="lg">
+        <Container size="large">
+          {/* Header */}
+          <div className="mb-space-9">
+            <h1 className="font-heading text-h1 font-600 mb-space-4 leading-lh-1-1">
+              Upcoming Events in {city.name}
+            </h1>
+            <p className="font-body text-p-18 text-brand-grey-500">
+              Join us for community gatherings, workshops, and more
+            </p>
+          </div>
 
-        {/* Events Grid */}
-        {allEvents.length === 0 ? (
-          <Card>
-            <CardContent className="pt-12 pb-12">
-              <div className="text-center">
-                <CalendarIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-semibold mb-2">No Upcoming Events</h3>
-                <p className="text-muted-foreground">
+          {/* Events Grid */}
+          {allEvents.length === 0 ? (
+            <BeigeContentCard>
+              <div className="text-center py-space-9">
+                <CalendarIcon className="h-12 w-12 mx-auto mb-space-4 text-brand-grey-500" />
+                <h3 className="font-heading text-h4 font-600 mb-space-2">No Upcoming Events</h3>
+                <p className="font-body text-p-16 text-brand-grey-500">
                   Check back soon for new events in {city.name}
                 </p>
               </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {allEvents.map((event) => (
-              <EventCard key={event.id} event={event} citySlug={citySlug} />
-            ))}
-          </div>
-        )}
-      </div>
+            </BeigeContentCard>
+          ) : (
+            <Grid cols={1} mdCols={2} lgCols={3} gap="md">
+              {allEvents.map((event) => (
+                <EventCard key={event.id} event={event} citySlug={citySlug} />
+              ))}
+            </Grid>
+          )}
+        </Container>
+      </Section>
     </div>
   );
 }
@@ -106,38 +106,41 @@ function EventCard({
 
   return (
     <Link href={`/${citySlug}/events/${event.slug}`}>
-      <Card className="h-full transition-shadow hover:shadow-lg cursor-pointer">
-        <CardHeader>
-          <CardTitle className="text-xl">{event.title}</CardTitle>
-          <CardDescription className="line-clamp-2">
-            {event.description || 'No description'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center gap-2 text-sm">
-            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <div className="font-medium">{formattedDate}</div>
-              <div className="text-muted-foreground">{formattedTime}</div>
-            </div>
+      <BeigeContentCard className="h-full transition-shadow hover:shadow-lg cursor-pointer">
+        <div className="space-y-space-4">
+          <div>
+            <h3 className="font-heading text-h5 font-600 mb-space-2">{event.title}</h3>
+            <p className="font-body text-p-14 text-brand-grey-500 line-clamp-2 leading-lh-1-5">
+              {event.description || 'No description'}
+            </p>
           </div>
 
-          {event.location_name && (
-            <div className="flex items-center gap-2 text-sm">
-              <MapPinIcon className="h-4 w-4 text-muted-foreground" />
-              <span className="line-clamp-1">{event.location_name}</span>
+          <div className="space-y-space-3">
+            <div className="flex items-center gap-space-2 text-p-14">
+              <CalendarIcon className="h-4 w-4 text-brand-grey-500" />
+              <div>
+                <div className="font-heading font-500">{formattedDate}</div>
+                <div className="font-body text-brand-grey-500">{formattedTime}</div>
+              </div>
             </div>
-          )}
 
-          <div className="flex items-center gap-2 text-sm pt-2">
-            <UsersIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">
-              {event.rsvp_yes_count}{' '}
-              {event.rsvp_yes_count === 1 ? 'person' : 'people'} attending
-            </span>
+            {event.location_name && (
+              <div className="flex items-center gap-space-2 font-body text-p-14">
+                <MapPinIcon className="h-4 w-4 text-brand-grey-500" />
+                <span className="line-clamp-1">{event.location_name}</span>
+              </div>
+            )}
+
+            <div className="flex items-center gap-space-2 font-body text-p-14 pt-space-2">
+              <UsersIcon className="h-4 w-4 text-brand-grey-500" />
+              <span className="text-brand-grey-500">
+                {event.rsvp_yes_count}{' '}
+                {event.rsvp_yes_count === 1 ? 'person' : 'people'} attending
+              </span>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </BeigeContentCard>
     </Link>
   );
 }

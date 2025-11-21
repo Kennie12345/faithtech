@@ -10,6 +10,7 @@
 ALTER TABLE event_rsvps ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: Everyone can see RSVPs (needed for attendee lists and counts)
+DROP POLICY IF EXISTS "Event RSVPs visible to everyone" ON event_rsvps;
 CREATE POLICY "Event RSVPs visible to everyone"
   ON event_rsvps
   FOR SELECT
@@ -17,6 +18,7 @@ CREATE POLICY "Event RSVPs visible to everyone"
   USING (true);
 
 -- INSERT: Members can RSVP to events in their city
+DROP POLICY IF EXISTS "Event RSVPs insertable by city members" ON event_rsvps;
 CREATE POLICY "Event RSVPs insertable by city members"
   ON event_rsvps
   FOR INSERT
@@ -27,11 +29,12 @@ CREATE POLICY "Event RSVPs insertable by city members"
       SELECT 1
       FROM events
       WHERE events.id = event_rsvps.event_id
-        AND events.city_id = auth.current_city()
+        AND events.city_id = public.current_city()
     )
   );
 
 -- UPDATE: Users can update their own RSVP (change yes/no/maybe)
+DROP POLICY IF EXISTS "Event RSVPs updatable by owner" ON event_rsvps;
 CREATE POLICY "Event RSVPs updatable by owner"
   ON event_rsvps
   FOR UPDATE
@@ -40,6 +43,7 @@ CREATE POLICY "Event RSVPs updatable by owner"
   WITH CHECK (user_id = auth.uid());
 
 -- DELETE: Users can delete their own RSVP (cancel attendance)
+DROP POLICY IF EXISTS "Event RSVPs deletable by owner" ON event_rsvps;
 CREATE POLICY "Event RSVPs deletable by owner"
   ON event_rsvps
   FOR DELETE

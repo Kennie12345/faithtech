@@ -5,8 +5,8 @@
 
 -- Events table: Community events with RSVPs
 -- Isolated per city via city_id foreign key
-CREATE TABLE events (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   city_id UUID NOT NULL REFERENCES cities(id) ON DELETE CASCADE,
 
   -- Event details
@@ -34,15 +34,16 @@ CREATE TABLE events (
 );
 
 -- Index for city-based queries (most common filter)
-CREATE INDEX events_city_idx ON events(city_id);
+CREATE INDEX IF NOT EXISTS events_city_idx ON events(city_id);
 
 -- Index for chronological queries (show upcoming events)
-CREATE INDEX events_starts_at_idx ON events(starts_at DESC);
+CREATE INDEX IF NOT EXISTS events_starts_at_idx ON events(starts_at DESC);
 
 -- Index for creator queries
-CREATE INDEX events_created_by_idx ON events(created_by);
+CREATE INDEX IF NOT EXISTS events_created_by_idx ON events(created_by);
 
 -- Trigger: Auto-update updated_at timestamp
+DROP TRIGGER IF EXISTS events_updated_at ON events;
 CREATE TRIGGER events_updated_at
   BEFORE UPDATE ON events
   FOR EACH ROW

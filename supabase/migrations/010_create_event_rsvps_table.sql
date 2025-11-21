@@ -5,8 +5,8 @@
 
 -- Event RSVPs table: User responses to events (yes/no/maybe)
 -- One RSVP per user per event (enforced by unique constraint)
-CREATE TABLE event_rsvps (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS event_rsvps (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
 
@@ -21,13 +21,13 @@ CREATE TABLE event_rsvps (
 );
 
 -- Index for event-based queries (show all RSVPs for an event)
-CREATE INDEX event_rsvps_event_idx ON event_rsvps(event_id);
+CREATE INDEX IF NOT EXISTS event_rsvps_event_idx ON event_rsvps(event_id);
 
 -- Index for user-based queries (show all events a user RSVP'd to)
-CREATE INDEX event_rsvps_user_idx ON event_rsvps(user_id);
+CREATE INDEX IF NOT EXISTS event_rsvps_user_idx ON event_rsvps(user_id);
 
 -- Index for status filtering (count 'yes' RSVPs)
-CREATE INDEX event_rsvps_status_idx ON event_rsvps(status);
+CREATE INDEX IF NOT EXISTS event_rsvps_status_idx ON event_rsvps(status);
 
 -- Comments for documentation
 COMMENT ON TABLE event_rsvps IS 'User RSVPs to events. One RSVP per user per event.';

@@ -35,6 +35,32 @@ SELECT * FROM events WHERE city_id = auth.current_city();
 
 ---
 
+## Critical: Idempotent Policy Creation
+
+**All RLS policies MUST use the idempotent pattern** to allow migrations to be re-run safely:
+
+```sql
+-- ✅ CORRECT: Idempotent (safe to run multiple times)
+DROP POLICY IF EXISTS "policy_name" ON table_name;
+CREATE POLICY "policy_name" ON table_name
+  FOR SELECT
+  USING (...);
+
+-- ❌ WRONG: Non-idempotent (fails on second run)
+CREATE POLICY "policy_name" ON table_name
+  FOR SELECT
+  USING (...);
+```
+
+**Why this matters:**
+- Allows `supabase db reset` to work repeatedly during development
+- Enables self-healing migrations (can re-run if partially applied)
+- Production-safe (can re-deploy without errors)
+
+**This pattern MUST be used in ALL migration files that create RLS policies.**
+
+---
+
 ## Core RLS Patterns
 
 ### Pattern 1: City Isolation
@@ -46,21 +72,25 @@ SELECT * FROM events WHERE city_id = auth.current_city();
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 
 -- Policy: SELECT queries only return user's city data
+DROP POLICY IF EXISTS "city_isolation_select" ON events;
 CREATE POLICY "city_isolation_select" ON events
   FOR SELECT
   USING (city_id = auth.current_city());
 
 -- Policy: INSERT must set city_id to user's city
+DROP POLICY IF EXISTS "city_isolation_insert" ON events;
 CREATE POLICY "city_isolation_insert" ON events
   FOR INSERT
   WITH CHECK (city_id = auth.current_city());
 
 -- Policy: UPDATE only own city's data
+DROP POLICY IF EXISTS "city_isolation_update" ON events;
 CREATE POLICY "city_isolation_update" ON events
   FOR UPDATE
   USING (city_id = auth.current_city());
 
 -- Policy: DELETE only own city's data
+DROP POLICY IF EXISTS "city_isolation_delete" ON events;
 CREATE POLICY "city_isolation_delete" ON events
   FOR DELETE
   USING (city_id = auth.current_city());
@@ -331,11 +361,13 @@ When creating feature tables (events, blog posts, etc.), follow this template:
 ALTER TABLE [table_name] ENABLE ROW LEVEL SECURITY;
 
 -- 2. SELECT: City isolation
+DROP POLICY IF EXISTS "[table]_select" ON [table_name];
 CREATE POLICY "[table]_select" ON [table_name]
   FOR SELECT
   USING (city_id = auth.current_city());
 
 -- 3. INSERT: Only city admins
+DROP POLICY IF EXISTS "[table]_insert" ON [table_name];
 CREATE POLICY "[table]_insert" ON [table_name]
   FOR INSERT
   WITH CHECK (
@@ -344,6 +376,7 @@ CREATE POLICY "[table]_insert" ON [table_name]
   );
 
 -- 4. UPDATE: Only city admins
+DROP POLICY IF EXISTS "[table]_update" ON [table_name];
 CREATE POLICY "[table]_update" ON [table_name]
   FOR UPDATE
   USING (
@@ -352,6 +385,7 @@ CREATE POLICY "[table]_update" ON [table_name]
   );
 
 -- 5. DELETE: Only city admins
+DROP POLICY IF EXISTS "[table]_delete" ON [table_name];
 CREATE POLICY "[table]_delete" ON [table_name]
   FOR DELETE
   USING (

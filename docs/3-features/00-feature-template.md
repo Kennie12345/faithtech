@@ -65,15 +65,19 @@ CREATE INDEX [table]_created_at_idx ON [table_name](created_at DESC);
 
 ## RLS Policies
 
+**IMPORTANT:** All policies MUST be idempotent using `DROP POLICY IF EXISTS` pattern.
+
 ```sql
 ALTER TABLE [table_name] ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: City isolation
+DROP POLICY IF EXISTS "[table]_select" ON [table_name];
 CREATE POLICY "[table]_select" ON [table_name]
   FOR SELECT
   USING (city_id = auth.current_city());
 
 -- INSERT: Only city admins
+DROP POLICY IF EXISTS "[table]_insert" ON [table_name];
 CREATE POLICY "[table]_insert" ON [table_name]
   FOR INSERT
   WITH CHECK (
@@ -82,6 +86,7 @@ CREATE POLICY "[table]_insert" ON [table_name]
   );
 
 -- UPDATE: Only city admins
+DROP POLICY IF EXISTS "[table]_update" ON [table_name];
 CREATE POLICY "[table]_update" ON [table_name]
   FOR UPDATE
   USING (
@@ -90,6 +95,7 @@ CREATE POLICY "[table]_update" ON [table_name]
   );
 
 -- DELETE: Only city admins
+DROP POLICY IF EXISTS "[table]_delete" ON [table_name];
 CREATE POLICY "[table]_delete" ON [table_name]
   FOR DELETE
   USING (

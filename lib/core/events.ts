@@ -54,6 +54,7 @@ export type EventName =
   | 'post:unpublished'
   | 'post:updated'
   | 'post:deleted'
+  | 'post:featured'
   // Newsletter events
   | 'subscriber:added'
   | 'subscriber:removed'
@@ -94,6 +95,7 @@ export interface EventPayloads {
   'post:unpublished': { postId: string; cityId: string };
   'post:updated': { postId: string; cityId: string; updatedBy: string };
   'post:deleted': { postId: string; cityId: string; deletedBy: string };
+  'post:featured': { postId: string; cityId: string; featuredBy: string };
 
   // Newsletter events
   'subscriber:added': { email: string; cityId: string };
@@ -141,41 +143,41 @@ class EventBusClass extends EventEmitter {
   /**
    * Emit an event with type-safe payload
    */
-  public emitEvent<K extends EventName>(
+  public emitEvent<K extends keyof EventPayloads>(
     event: K,
     payload: EventPayloads[K]
   ): void {
-    this.emit(event, payload);
+    this.emit(event as string, payload);
   }
 
   /**
    * Listen to an event with type-safe payload
    */
-  public onEvent<K extends EventName>(
+  public onEvent<K extends keyof EventPayloads>(
     event: K,
     listener: (payload: EventPayloads[K]) => void | Promise<void>
   ): void {
-    this.on(event, listener);
+    this.on(event as string, listener);
   }
 
   /**
    * Listen to an event once with type-safe payload
    */
-  public onceEvent<K extends EventName>(
+  public onceEvent<K extends keyof EventPayloads>(
     event: K,
     listener: (payload: EventPayloads[K]) => void | Promise<void>
   ): void {
-    this.once(event, listener);
+    this.once(event as string, listener);
   }
 
   /**
    * Remove listener
    */
-  public offEvent<K extends EventName>(
+  public offEvent<K extends keyof EventPayloads>(
     event: K,
     listener: (payload: EventPayloads[K]) => void | Promise<void>
   ): void {
-    this.off(event, listener);
+    this.off(event as string, listener);
   }
 
   /**
@@ -192,15 +194,15 @@ class EventBusClass extends EventEmitter {
   /**
    * Remove all listeners for an event
    */
-  public removeAllListenersForEvent(event: EventName): void {
-    this.removeAllListeners(event);
+  public removeAllListenersForEvent(event: keyof EventPayloads): void {
+    this.removeAllListeners(event as string);
   }
 
   /**
    * Get number of listeners for an event
    */
-  public getListenerCount(event: EventName): number {
-    return this.listenerCount(event);
+  public getListenerCount(event: keyof EventPayloads): number {
+    return this.listenerCount(event as string);
   }
 }
 
@@ -221,7 +223,7 @@ export const EventBus = EventBusClass.getInstance();
 /**
  * Emit an event (convenience wrapper)
  */
-export function emitEvent<K extends EventName>(
+export function emitEvent<K extends keyof EventPayloads>(
   event: K,
   payload: EventPayloads[K]
 ): void {
@@ -231,7 +233,7 @@ export function emitEvent<K extends EventName>(
 /**
  * Listen to an event (convenience wrapper)
  */
-export function onEvent<K extends EventName>(
+export function onEvent<K extends keyof EventPayloads>(
   event: K,
   listener: (payload: EventPayloads[K]) => void | Promise<void>
 ): void {
@@ -241,7 +243,7 @@ export function onEvent<K extends EventName>(
 /**
  * Listen to an event once (convenience wrapper)
  */
-export function onceEvent<K extends EventName>(
+export function onceEvent<K extends keyof EventPayloads>(
   event: K,
   listener: (payload: EventPayloads[K]) => void | Promise<void>
 ): void {
@@ -251,7 +253,7 @@ export function onceEvent<K extends EventName>(
 /**
  * Remove listener (convenience wrapper)
  */
-export function offEvent<K extends EventName>(
+export function offEvent<K extends keyof EventPayloads>(
   event: K,
   listener: (payload: EventPayloads[K]) => void | Promise<void>
 ): void {

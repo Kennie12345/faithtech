@@ -514,6 +514,115 @@ export async function getGroupMembers(groupId: string): Promise<(GroupMember & {
 }
 
 // =============================================================================
+// STATISTICS & AGGREGATIONS
+// =============================================================================
+
+export interface CityStats {
+  memberCount: number;
+  eventCount: number;
+  projectCount: number;
+  postCount: number;
+}
+
+export interface GlobalStats {
+  cityCount: number;
+  memberCount: number;
+  eventCount: number;
+  projectCount: number;
+}
+
+/**
+ * Get real-time statistics for a specific city
+ * Uses COUNT aggregation queries for accuracy
+ *
+ * @param cityId - City ID to get stats for
+ * @returns Object with member, event, project, and post counts
+ *
+ * NOTE: These are real-time queries. For high-traffic sites, consider
+ * caching these values in a separate city_stats table updated hourly.
+ */
+export async function getCityStats(cityId: string): Promise<CityStats> {
+  const supabase = await createClient();
+
+  // Run queries in parallel for performance
+  const [members, events, projects, posts] = await Promise.all([
+    supabase
+      .from('user_city_roles')
+      .select('*', { count: 'exact', head: true })
+      .eq('city_id', cityId),
+    supabase
+      .from('events')
+      .select('*', { count: 'exact', head: true })
+      .eq('city_id', cityId),
+    supabase
+      .from('projects')
+      .select('*', { count: 'exact', head: true })
+      .eq('city_id', cityId),
+    supabase
+      .from('posts')
+      .select('*', { count: 'exact', head: true })
+      .eq('city_id', cityId)
+      .eq('status', 'published'),
+  ]);
+
+  // Handle errors by returning 0 for failed queries
+  const memberCount = members.error ? 0 : (members.count || 0);
+  const eventCount = events.error ? 0 : (events.count || 0);
+  const projectCount = projects.error ? 0 : (projects.count || 0);
+  const postCount = posts.error ? 0 : (posts.count || 0);
+
+  return {
+    memberCount,
+    eventCount,
+    projectCount,
+    postCount,
+  };
+}
+
+/**
+ * Get aggregate statistics across all active cities
+ * Used for root homepage global stats display
+ *
+ * @returns Object with city, member, event, and project counts
+ *
+ * NOTE: These are real-time aggregations across entire database.
+ * Consider caching for production deployments.
+ */
+export async function getGlobalStats(): Promise<GlobalStats> {
+  const supabase = await createClient();
+
+  // Run queries in parallel for performance
+  const [cities, members, events, projects] = await Promise.all([
+    supabase
+      .from('cities')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true),
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true }),
+    supabase
+      .from('events')
+      .select('*', { count: 'exact', head: true }),
+    supabase
+      .from('projects')
+      .select('*', { count: 'exact', head: true }),
+  ]);
+
+  // Handle errors by returning 0 for failed queries
+  const cityCount = cities.error ? 0 : (cities.count || 0);
+  const memberCount = members.error ? 0 : (members.count || 0);
+  const eventCount = events.error ? 0 : (events.count || 0);
+  const projectCount = projects.error ? 0 : (projects.count || 0);
+
+  return {
+    cityCount,
+    memberCount,
+    eventCount,
+    projectCount,
+  };
+}
+
+// =============================================================================
 // EXPORTS
 // =============================================================================
 
@@ -547,6 +656,10 @@ export const CoreAPI = {
   // Groups
   getGroups,
   getGroupMembers,
+
+  // Statistics
+  getCityStats,
+  getGlobalStats,
 };
 
 export default CoreAPI;

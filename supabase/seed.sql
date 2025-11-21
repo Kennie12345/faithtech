@@ -12,45 +12,12 @@
 -- CITIES
 -- =============================================================================
 
--- Insert test cities for Australia
-INSERT INTO cities (id, name, slug, logo_url, hero_image_url, accent_color, is_active, created_at, updated_at)
-VALUES
-  -- Adelaide (FaithTech Australia HQ)
-  (
-    'c1111111-1111-1111-1111-111111111111',
-    'Adelaide',
-    'adelaide',
-    NULL, -- Logo to be added later via storage
-    NULL, -- Hero image to be added later via storage
-    '#6366f1', -- Indigo (default)
-    true,
-    now(),
-    now()
-  ),
-  -- Sydney
-  (
-    'c2222222-2222-2222-2222-222222222222',
-    'Sydney',
-    'sydney',
-    NULL,
-    NULL,
-    '#8b5cf6', -- Purple
-    true,
-    now(),
-    now()
-  ),
-  -- Melbourne
-  (
-    'c3333333-3333-3333-3333-333333333333',
-    'Melbourne',
-    'melbourne',
-    NULL,
-    NULL,
-    '#ec4899', -- Pink
-    true,
-    now(),
-    now()
-  );
+-- NOTE: Default cities are now seeded via migration 020_seed_default_cities.sql
+-- This seed file is for LOCAL DEVELOPMENT ONLY and focuses on test data
+-- (groups, events, projects, blog posts, etc.)
+--
+-- The 4 Australian cities (Adelaide, Sydney, Melbourne, Brisbane) are already
+-- created by the migration system, so we don't need to insert them here.
 
 -- =============================================================================
 -- TEST USERS & PROFILES
@@ -180,9 +147,9 @@ VALUES
 -- =============================================================================
 
 -- Create upcoming test events
-INSERT INTO events (id, city_id, title, description, slug, starts_at, ends_at, location_name, location_address, max_attendees, created_at, updated_at)
+INSERT INTO events (id, city_id, title, description, slug, starts_at, ends_at, location_name, location_address, max_attendees, is_featured, created_at, updated_at)
 VALUES
-  -- Adelaide upcoming event
+  -- Adelaide upcoming event (FEATURED)
   (
     'e1111111-1111-1111-1111-111111111111',
     'c1111111-1111-1111-1111-111111111111',
@@ -194,10 +161,11 @@ VALUES
     'St Paul''s Church',
     '123 Main Street, Adelaide SA 5000',
     50,
+    true, -- Featured on homepage
     now(),
     now()
   ),
-  -- Adelaide upcoming event 2
+  -- Adelaide upcoming event 2 (FEATURED)
   (
     'e1111112-1111-1111-1111-111111111111',
     'c1111111-1111-1111-1111-111111111111',
@@ -209,10 +177,11 @@ VALUES
     'TechHub Adelaide',
     '456 Tech St, Adelaide SA 5000',
     25,
+    true, -- Featured on homepage
     now(),
     now()
   ),
-  -- Sydney upcoming event
+  -- Sydney upcoming event (FEATURED)
   (
     'e2222221-2222-2222-2222-222222222222',
     'c2222222-2222-2222-2222-222222222222',
@@ -224,10 +193,11 @@ VALUES
     'Hillsong City Campus',
     '789 George St, Sydney NSW 2000',
     NULL, -- Unlimited capacity
+    true, -- Featured on homepage
     now(),
     now()
   ),
-  -- Melbourne upcoming event
+  -- Melbourne upcoming event (FEATURED)
   (
     'e3333331-3333-3333-3333-333333333333',
     'c3333333-3333-3333-3333-333333333333',
@@ -239,6 +209,7 @@ VALUES
     'Melbourne Convention Centre',
     '1 Convention Centre Pl, South Wharf VIC 3006',
     100,
+    true, -- Featured on homepage
     now(),
     now()
   ),
@@ -254,6 +225,7 @@ VALUES
     'St Paul''s Church',
     '123 Main Street, Adelaide SA 5000',
     NULL,
+    false, -- Past event, not featured
     now() - interval '45 days',
     now() - interval '45 days'
   );
@@ -385,6 +357,98 @@ VALUES
     false,
     now() - interval '15 days',
     now() - interval '10 days'
+  );
+
+-- =============================================================================
+-- BLOG POSTS (Test blog posts for each city)
+-- =============================================================================
+
+-- Create test blog posts showcasing community updates and stories
+INSERT INTO posts (id, city_id, title, content, slug, excerpt, published_at, is_featured, featured_image_url, created_at, updated_at)
+VALUES
+  -- Adelaide featured post (published)
+  (
+    'b1111111-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'Introducing FaithTech Adelaide: Building Tech for Good',
+    E'# Welcome to FaithTech Adelaide!\n\nWe''re excited to announce the launch of FaithTech Adelaide, a community of Christian technologists, designers, and innovators passionate about using technology for the glory of God.\n\n## Our Vision\n\nAt FaithTech Adelaide, we believe that technology is a gift from God that can be used to advance His kingdom. We''re committed to:\n\n- Building tech-for-good projects that serve our community\n- Running CREATE hackathons where ideas become reality\n- Mentoring the next generation of Christian technologists\n- Fostering a community of faith and innovation\n\n## Get Involved\n\nWhether you''re a developer, designer, product manager, or just tech-curious, there''s a place for you at FaithTech Adelaide. Join us for our monthly meetups, participate in CREATE hackathons, or contribute to one of our community projects.\n\nTogether, let''s use our skills to make a difference in Adelaide and beyond!',
+    'introducing-faithtech-adelaide',
+    'We''re excited to announce the launch of FaithTech Adelaide, a community of Christian technologists passionate about using technology for the glory of God.',
+    now() - interval '30 days',
+    true, -- Featured post
+    NULL,
+    now() - interval '30 days',
+    now() - interval '25 days'
+  ),
+  -- Adelaide regular post (published)
+  (
+    'b1111112-1111-1111-1111-111111111111',
+    'c1111111-1111-1111-1111-111111111111',
+    'CREATE Adelaide 2024 Recap: 10 Projects Built in 48 Hours',
+    E'# CREATE Adelaide 2024: A Weekend of Innovation\n\nWhat happens when you gather 50 Christian technologists in a room for 48 hours? Magic.\n\n## The Projects\n\nOur first CREATE hackathon in Adelaide produced 10 incredible projects:\n\n1. **Prayer Connect** - A mobile app for community prayer requests (Winner!)\n2. **Scripture Memory Game** - Gamified Bible verse memorization\n3. **Church Admin Portal** - Streamlined church management\n4. **Mission Trip Planner** - Coordination tool for mission teams\n5. **Youth Event Platform** - Social network for church youth groups\n\n## Highlights\n\n- 50+ participants from 15 different churches\n- 10 working prototypes built\n- 3 projects launching publicly this quarter\n- Countless new friendships formed\n\n## What''s Next?\n\nCREATE Adelaide 2025 is already in the works. Stay tuned for dates and registration details!',
+    'create-adelaide-2024-recap',
+    'What happens when you gather 50 Christian technologists for 48 hours? See what we built at CREATE Adelaide 2024.',
+    now() - interval '10 days',
+    false,
+    NULL,
+    now() - interval '10 days',
+    now() - interval '10 days'
+  ),
+  -- Sydney featured post (published)
+  (
+    'b2222221-2222-2222-2222-222222222222',
+    'c2222222-2222-2222-2222-222222222222',
+    'How AI is Transforming Ministry: Lessons from Sydney',
+    E'# AI in Ministry: Opportunity or Threat?\n\nArtificial Intelligence is no longer science fiction—it''s here, and it''s changing how we do ministry.\n\n## Real-World Applications\n\nAt FaithTech Sydney, we''ve been exploring how AI can enhance (not replace) ministry:\n\n### Sermon Preparation\n- AI-assisted research and cross-referencing\n- Quick generation of discussion questions\n- Automatic transcription and summarization\n\n### Community Care\n- Chatbots for basic prayer requests\n- Automated follow-up reminders\n- Translation services for multicultural churches\n\n### Administration\n- Smart scheduling for volunteers\n- Data-driven insights for church health\n- Automated report generation\n\n## Ethical Considerations\n\nBut with great power comes great responsibility. We must ask:\n- Does this technology honor God?\n- Does it enhance or replace human connection?\n- Are we being good stewards of this tool?\n\n## Join the Conversation\n\nCome to our next meetup where we''ll discuss AI ethics in ministry. All perspectives welcome!',
+    'ai-transforming-ministry-sydney',
+    'Exploring how Artificial Intelligence is changing ministry, and what it means for churches in Sydney.',
+    now() - interval '20 days',
+    true, -- Featured post
+    NULL,
+    now() - interval '20 days',
+    now() - interval '15 days'
+  ),
+  -- Sydney regular post (published)
+  (
+    'b2222222-2222-2222-2222-222222222222',
+    'c2222222-2222-2222-2222-222222222222',
+    'Meet the Team: Profile with David Chen, FaithTech Sydney Lead',
+    E'# Meet David Chen: Building Community Through Code\n\n## Background\n\nDavid has been a software engineer for 10 years and a Christian for 15. He leads the FaithTech Sydney community while working as a senior developer at a fintech startup.\n\n## Why FaithTech?\n\n"I wanted to use my tech skills for more than just building another startup," David shares. "When I discovered FaithTech, I found a community that shared my passion for using technology to advance God''s kingdom."\n\n## Vision for Sydney\n\nUnder David''s leadership, FaithTech Sydney has grown from 5 members to over 80 in just two years. His vision includes:\n\n- Monthly meetups for learning and fellowship\n- Annual CREATE hackathon\n- Mentorship programs for young developers\n- Partnerships with local churches for tech projects\n\n## Get Connected\n\nInterested in getting involved? Reach out to David at our next meetup!',
+    'meet-david-chen-sydney-lead',
+    'Get to know David Chen, the passionate leader behind FaithTech Sydney and his vision for tech-enabled ministry.',
+    now() - interval '5 days',
+    false,
+    NULL,
+    now() - interval '5 days',
+    now() - interval '5 days'
+  ),
+  -- Melbourne featured post (published)
+  (
+    'b3333331-3333-3333-3333-333333333333',
+    'c3333333-3333-3333-3333-333333333333',
+    '5 Ways to Use Tech to Grow Your Small Group',
+    E'# Tech for Small Groups: A Practical Guide\n\nSmall groups are the heart of many churches, but organizing them can be challenging. Here''s how technology can help.\n\n## 1. Communication Platforms\n\nDitch the endless email chains. Use:\n- Slack or Discord for ongoing discussions\n- WhatsApp for quick updates\n- Zoom for virtual meetings\n\n## 2. Study Resources\n\nEnhance your Bible studies with:\n- YouVersion Bible app for shared reading plans\n- BibleProject videos for context\n- Logos or Accordance for deep dives\n\n## 3. Scheduling Tools\n\nCoordinate meetings without the back-and-forth:\n- Doodle for finding meeting times\n- Google Calendar for reminders\n- SignUpGenius for meal trains and service projects\n\n## 4. Prayer Tools\n\nMake prayer more accessible:\n- Shared prayer request documents\n- Reminder apps for prayer commitments\n- Voice note apps for longer prayer sharing\n\n## 5. Content Management\n\nKeep everything organized:\n- Notion for shared notes and resources\n- Google Drive for documents and videos\n- Airtable for tracking members and needs\n\n## Start Simple\n\nYou don''t need all these tools at once. Pick one or two that solve your biggest pain points, and grow from there.',
+    'tech-for-small-groups',
+    'Practical ways to use technology to enhance your small group ministry, from communication to Bible study.',
+    now() - interval '15 days',
+    true, -- Featured post
+    NULL,
+    now() - interval '15 days',
+    now() - interval '12 days'
+  ),
+  -- Melbourne draft post (unpublished)
+  (
+    'b3333332-3333-3333-3333-333333333333',
+    'c3333333-3333-3333-3333-333333333333',
+    'Upcoming: Tech Sabbath Workshop - Finding Rest in a Digital Age',
+    E'# Tech Sabbath Workshop - Coming Soon\n\nJoin us for a special workshop on practicing digital rest and healthy technology boundaries.\n\n## Workshop Details\n\n**Date:** TBD\n**Time:** TBD\n**Location:** TBD\n\n## What We''ll Cover\n\n- Biblical foundations for Sabbath rest\n- Practical strategies for digital detox\n- Setting healthy boundaries with devices\n- Creating tech-free family time\n- Mindful technology use\n\n## Why This Matters\n\nIn our always-connected world, we need to intentionally create space for rest and reflection. This workshop will help you develop practices that honor both the gift of technology and the gift of rest.\n\n## Registration\n\nMore details coming soon! Stay tuned for registration information.',
+    'tech-sabbath-workshop',
+    'Join our upcoming workshop on digital rest and healthy technology boundaries. Learn to find balance in an always-connected world.',
+    NULL, -- Draft (not published)
+    false,
+    NULL,
+    now() - interval '2 days',
+    now() - interval '1 day'
   );
 
 -- =============================================================================

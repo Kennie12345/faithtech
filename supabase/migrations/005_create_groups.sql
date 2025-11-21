@@ -5,8 +5,8 @@
 
 -- Groups table: Community groups within a city
 -- Examples: "Web Developers", "Prayer Team", "Event Volunteers"
-CREATE TABLE groups (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS groups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
   -- Multi-tenant isolation: Groups belong to a city
   city_id UUID NOT NULL REFERENCES cities(id) ON DELETE CASCADE,
@@ -27,8 +27,8 @@ CREATE TABLE groups (
 );
 
 -- Group members: Junction table for users in groups
-CREATE TABLE group_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS group_members (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
   -- Relationships
   group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
@@ -42,14 +42,15 @@ CREATE TABLE group_members (
 );
 
 -- Indexes for groups
-CREATE INDEX groups_city_idx ON groups(city_id);
-CREATE INDEX groups_public_idx ON groups(is_public) WHERE is_public = true;
+CREATE INDEX IF NOT EXISTS groups_city_idx ON groups(city_id);
+CREATE INDEX IF NOT EXISTS groups_public_idx ON groups(is_public) WHERE is_public = true;
 
 -- Indexes for group_members
-CREATE INDEX group_members_group_idx ON group_members(group_id);
-CREATE INDEX group_members_user_idx ON group_members(user_id);
+CREATE INDEX IF NOT EXISTS group_members_group_idx ON group_members(group_id);
+CREATE INDEX IF NOT EXISTS group_members_user_idx ON group_members(user_id);
 
 -- Triggers: Auto-update updated_at timestamp
+DROP TRIGGER IF EXISTS groups_updated_at ON groups;
 CREATE TRIGGER groups_updated_at
   BEFORE UPDATE ON groups
   FOR EACH ROW

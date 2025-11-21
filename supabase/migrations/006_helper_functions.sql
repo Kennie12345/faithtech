@@ -3,7 +3,7 @@
 -- Dependencies: 004 (user_city_roles table)
 -- Blocks: 007 (RLS policies reference these functions)
 
--- Function: auth.current_city()
+-- Function: public.current_city()
 -- Returns the current city_id for the authenticated user
 -- Used by RLS policies to filter data by city
 --
@@ -14,7 +14,7 @@
 --
 -- Application must set context via:
 -- SET LOCAL app.current_city_id = 'uuid-here';
-CREATE OR REPLACE FUNCTION auth.current_city()
+CREATE OR REPLACE FUNCTION public.current_city()
 RETURNS UUID
 LANGUAGE plpgsql
 STABLE
@@ -38,12 +38,17 @@ BEGIN
   END;
 
   -- Fallback: If user is only a member of ONE city, return that city
-  SELECT COUNT(*), MIN(city_id)
-  INTO user_city_count, first_city_id
+  SELECT COUNT(*)
+  INTO user_city_count
   FROM user_city_roles
   WHERE user_id = auth.uid();
 
   IF user_city_count = 1 THEN
+    SELECT city_id
+    INTO first_city_id
+    FROM user_city_roles
+    WHERE user_id = auth.uid()
+    LIMIT 1;
     RETURN first_city_id;
   END IF;
 
@@ -53,14 +58,14 @@ BEGIN
 END;
 $$;
 
--- Function: auth.user_role(city_id UUID)
+-- Function: public.user_role(city_id UUID)
 -- Returns the user's role in a specific city
 -- Used by RLS policies to check permissions
 --
 -- Returns:
 -- - 'super_admin', 'city_admin', or 'member' if user has access to the city
 -- - NULL if user is not a member of the city
-CREATE OR REPLACE FUNCTION auth.user_role(city_id UUID)
+CREATE OR REPLACE FUNCTION public.user_role(city_id UUID)
 RETURNS user_role
 LANGUAGE sql
 STABLE
@@ -73,10 +78,10 @@ AS $$
   LIMIT 1;
 $$;
 
--- Function: auth.is_super_admin()
+-- Function: public.is_super_admin()
 -- Convenience function to check if current user is a super admin in ANY city
 -- Super admins have global access across all cities
-CREATE OR REPLACE FUNCTION auth.is_super_admin()
+CREATE OR REPLACE FUNCTION public.is_super_admin()
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
@@ -91,14 +96,14 @@ AS $$
 $$;
 
 -- Grant execute permissions to authenticated users
-GRANT EXECUTE ON FUNCTION auth.current_city() TO authenticated;
-GRANT EXECUTE ON FUNCTION auth.user_role(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION auth.is_super_admin() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.current_city() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.user_role(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_super_admin() TO authenticated;
 
 -- Comments for documentation
-COMMENT ON FUNCTION auth.current_city() IS 'Returns current city_id from session context or user''s only city. Used by RLS policies for multi-tenant filtering.';
-COMMENT ON FUNCTION auth.user_role(UUID) IS 'Returns user''s role (super_admin, city_admin, member) in the specified city. Returns NULL if not a member.';
-COMMENT ON FUNCTION auth.is_super_admin() IS 'Returns true if user has super_admin role in any city. Super admins have global access.';
+COMMENT ON FUNCTION public.current_city() IS 'Returns current_city_id from session context or user''s only city. Used by RLS policies for multi-tenant filtering.';
+COMMENT ON FUNCTION public.user_role(UUID) IS 'Returns user''s role (super_admin, city_admin, member) in the specified city. Returns NULL if not a member.';
+COMMENT ON FUNCTION public.is_super_admin() IS 'Returns true if user has super_admin role in any city. Super admins have global access.';
 
 -- Performance note: These functions are marked STABLE (not VOLATILE)
 -- This allows PostgreSQL to cache results within a single query for better performance

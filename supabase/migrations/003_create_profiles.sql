@@ -5,7 +5,7 @@
 
 -- Profiles table: Extended user information beyond auth.users
 -- One-to-one relationship with auth.users
-CREATE TABLE profiles (
+CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
 
   -- Identity
@@ -26,13 +26,14 @@ CREATE TABLE profiles (
 );
 
 -- Trigger: Auto-update updated_at timestamp
+DROP TRIGGER IF EXISTS profiles_updated_at ON profiles;
 CREATE TRIGGER profiles_updated_at
   BEFORE UPDATE ON profiles
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
 -- Index for lookups (though id is already PK)
-CREATE INDEX profiles_id_idx ON profiles(id);
+CREATE INDEX IF NOT EXISTS profiles_id_idx ON profiles(id);
 
 -- Comments for documentation
 COMMENT ON TABLE profiles IS 'Extended user profile information beyond Supabase auth.users';

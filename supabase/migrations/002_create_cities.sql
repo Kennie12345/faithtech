@@ -5,8 +5,8 @@
 
 -- Cities table: Core entity for multi-tenant architecture
 -- Each city has its own isolated data via city_id foreign keys
-CREATE TABLE cities (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+CREATE TABLE IF NOT EXISTS cities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
   -- Identity
   name TEXT NOT NULL,
@@ -27,10 +27,10 @@ CREATE TABLE cities (
 );
 
 -- Unique constraint on slug (used for routing /[citySlug]/...)
-CREATE UNIQUE INDEX cities_slug_unique ON cities(slug) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS cities_slug_unique ON cities(slug) WHERE deleted_at IS NULL;
 
 -- Index for filtering active cities
-CREATE INDEX cities_active_idx ON cities(is_active) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS cities_active_idx ON cities(is_active) WHERE deleted_at IS NULL;
 
 -- Trigger: Auto-update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -41,6 +41,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS cities_updated_at ON cities;
 CREATE TRIGGER cities_updated_at
   BEFORE UPDATE ON cities
   FOR EACH ROW

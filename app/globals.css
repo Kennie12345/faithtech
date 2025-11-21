@@ -4,57 +4,472 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* ============================================
+       RESPONSIVE SIZING SYSTEM (Fluid with clamp)
+       ============================================ */
+    --site--margin: clamp(1rem, 0.428rem + 2.86vw, 3rem);
+    --size--0rem: 0rem;
+    --size--0-125rem: 0.125rem;
+    --size--0-25rem: 0.25rem;
+    --size--0-375rem: 0.375rem;
+    --size--0-5rem: 0.5rem;
+    --size--0-75rem: 0.75rem;
+    --size--0-875rem: 0.875rem;
+    --size--1rem: 1rem;
+    --size--1-125rem: 1.125rem;
+    --size--1-25rem: 1.25rem;
+    --size--1-5rem: 1.5rem;
+    --size--1-75rem: 1.75rem;
+    --size--2rem: clamp(1.75rem, 1.678rem + 0.36vw, 2rem);
+    --size--2-5rem: clamp(2rem, 1.858rem + 0.71vw, 2.5rem);
+    --size--3rem: clamp(2.25rem, 2.036rem + 1.07vw, 3rem);
+    --size--3-5rem: clamp(2.375rem, 2.053rem + 1.61vw, 3.5rem);
+    --size--4rem: clamp(2.5rem, 2.072rem + 2.14vw, 4rem);
+    --size--4-5rem: clamp(2.75rem, 2.25rem + 2.5vw, 4.5rem);
+    --size--5rem: clamp(3rem, 2.428rem + 2.86vw, 5rem);
+    --size--5-5rem: clamp(3.25rem, 2.608rem + 3.21vw, 5.5rem);
+    --size--6rem: clamp(3.5rem, 2.786rem + 3.57vw, 6rem);
+    --size--6-5rem: clamp(3.75rem, 2.964rem + 3.93vw, 6.5rem);
+    --size--7rem: clamp(4rem, 3.142rem + 4.29vw, 7rem);
+    --size--7-5rem: clamp(4.25rem, 3.322rem + 4.64vw, 7.5rem);
+    --size--8rem: clamp(4.5rem, 3.5rem + 5vw, 8rem);
+    --size--8-5rem: clamp(4.75rem, 3.678rem + 5.36vw, 8.5rem);
+    --size--9rem: clamp(5rem, 3.858rem + 5.71vw, 9rem);
+    --size--9-5rem: clamp(5.25rem, 4.036rem + 6.07vw, 9.5rem);
+    --size--10rem: clamp(5.5rem, 4.214rem + 6.43vw, 10rem);
+    --size--11rem: clamp(5.75rem, 4.25rem + 7.5vw, 11rem);
+    --size--12rem: clamp(6rem, 4.286rem + 8.57vw, 12rem);
+    --size--13rem: clamp(6.5rem, 4.642rem + 9.29vw, 13rem);
+    --size--14rem: clamp(7rem, 5rem + 10vw, 14rem);
+    --size--15rem: clamp(7.5rem, 5.358rem + 10.71vw, 15rem);
+    --size--16rem: clamp(8rem, 5.714rem + 11.43vw, 16rem);
+
+    /* ============================================
+       SPACING SYSTEM
+       ============================================ */
+    --_spacing---space--1: var(--size--0-25rem);
+    --_spacing---space--2: var(--size--0-5rem);
+    --_spacing---space--3: var(--size--0-75rem);
+    --_spacing---space--4: var(--size--1rem);
+    --_spacing---space--4-5: var(--size--1-25rem);
+    --_spacing---space--5: var(--size--1-5rem);
+    --_spacing---space--5-5: var(--size--1-75rem);
+    --_spacing---space--6: var(--size--2rem);
+    --_spacing---space--6-5: var(--size--2-5rem);
+    --_spacing---space--7: var(--size--3rem);
+    --_spacing---space--8: var(--size--4rem);
+    --_spacing---space--9: var(--size--5rem);
+    --_spacing---space--10: var(--size--6rem);
+
+    /* Section Spacing */
+    --_spacing---section-space--none: var(--size--0rem);
+    --_spacing---section-space--small: var(--size--1-5rem);
+    --_spacing---section-space--main: var(--size--4rem);
+    --_spacing---section-space--large: var(--size--6rem);
+    --_spacing---section-space--xlarge: var(--size--10rem);
+    --_spacing---section-space--xxlarge: var(--size--12rem);
+
+    /* Content Spacing */
+    --_spacing---content-space--button-margin: var(--_spacing---space--6);
+    --_spacing---content-space--button-group-gap: var(--_spacing---space--2);
+    --_spacing---content-space--eyebrow-margin: var(--_spacing---space--5);
+
+    /* ============================================
+       BORDER RADIUS SYSTEM
+       ============================================ */
+    --radius--0-1875: 0.1875rem;
+    --radius--0-25: 0.25rem;
+    --radius--0-375: 0.375rem;
+    --radius--0-5: 0.5rem;
+    --radius--round: 100vw;
+
+    /* ============================================
+       BORDER WIDTHS
+       ============================================ */
+    --border-width--main: 0.094rem;
+
+    /* ============================================
+       FOCUS SYSTEM
+       ============================================ */
+    --focus--width: 0.125rem;
+    --focus--offset-inner: -0.125rem;
+    --focus--offset-outer: 0.1875rem;
+
+    /* ============================================
+       BRAND COLORS (Base Palette)
+       ============================================ */
+
+    /* Primary Brand - Yellows */
+    --brand--yellow-100: #fff737; /* Bright yellow for buttons */
+    --brand--yellow-200: #ffd800; /* Primary brand yellow */
+
+    /* Neutral - Greys & Beige */
+    --brand--grey-100: #f5f0f0;
+    --brand--grey-200: #e9e7e4;
+    --brand--grey-300: #e5e0d8; /* Updated: Beige/grey for component backgrounds */
+    --brand--grey-400: #cdcdcd;
+    --brand--grey-500: #c6c5bb;
+
+    /* Accent Colors - Greens */
+    --brand--green-100: #bae386;
+    --brand--green-200: #32a432;
+
+    /* Accent Colors - Oranges */
+    --brand--orange-100: #ffb300;
+    --brand--orange-200: #f05228;
+
+    /* Accent Colors - Blues */
+    --brand--blue-100: #8adfff;
+    --brand--blue-200: #1d8fb9;
+
+    /* Other */
+    --city-color: #f1e9e9;
+
+    /* ============================================
+       SWATCH SYSTEM (Foundation Layer)
+       ============================================ */
+    --swatch--light: white;
+    --swatch--dark: #16160c;
+    --swatch--brand: #ffd800; /* Updated: Primary brand yellow */
+    --swatch--brand-text: var(--swatch--dark);
+    --swatch--transparent: transparent;
+
+    /* Faded/Transparent Variants */
+    --swatch--faded-mid: #e5e0d87a; /* Updated: Beige with transparency */
+    --swatch--faded-dark: #16160c3d; /* Dark with transparency */
+    --swatch--faded-light: #ffffff29; /* White with transparency */
+
+    /* ============================================
+       TYPOGRAPHY SYSTEM
+       ============================================ */
+
+    /* Font Families */
+    --_typography---heading-font--heading-family: 'Noigrotesk', Arial, sans-serif;
+    --_typography---heading-font--heading-trim-top: 0.33em;
+    --_typography---heading-font--heading-trim-bottom: 0.33em;
+
+    --_typography---body-font--paragraph-family: 'Inter', Arial, sans-serif;
+    --_typography---body-font--body-trim-top: 0.33em;
+    --_typography---body-font--body-trim-bottom: 0.33em;
+
+    --_typography---accent-font--accent-family: 'Avril', 'Palatino Linotype', sans-serif;
+    --_typography---accent-font--accent-trim-top: 0.33em;
+    --_typography---accent-font--accent-trim-bottom: 0.33em;
+
+    /* Font Weights */
+    --_typography---font-weight--weight-300: 300;
+    --_typography---font-weight--weight-400: 400;
+    --_typography---font-weight--weight-500: 500;
+    --_typography---font-weight--weight-600: 600;
+    --_typography---font-weight--weight-700: 700;
+
+    /* Font Sizes */
+    --_typography---font-size--p-12: var(--size--0-75rem);
+    --_typography---font-size--p-14: var(--size--0-875rem);
+    --_typography---font-size--p-16: var(--size--1rem);
+    --_typography---font-size--p-18: var(--size--1-125rem);
+    --_typography---font-size--p-20: var(--size--1-25rem);
+
+    /* Heading Sizes */
+    --_typography---heading-size--display: var(--size--5rem);
+    --_typography---heading-size--h0: var(--size--4-5rem);
+    --_typography---heading-size--h1: var(--size--4rem);
+    --_typography---heading-size--h2: var(--size--3-5rem);
+    --_typography---heading-size--h3: var(--size--3rem);
+    --_typography---heading-size--h4: var(--size--2-5rem);
+    --_typography---heading-size--h5: var(--size--2rem);
+    --_typography---heading-size--h6: var(--size--1-5rem);
+    --_typography---heading-size--h1-large: var(--size--7-5rem);
+
+    /* Label Sizes */
+    --_typography---label-size--label-16: var(--size--1rem);
+    --_typography---label-size--label-14: var(--size--0-875rem);
+    --_typography---label-size--label-12: var(--size--0-75rem);
+
+    /* Line Heights */
+    --_typography---line-height--1: 1;
+    --_typography---line-height--1-05: 1.05;
+    --_typography---line-height--1-0625: 1.0625;
+    --_typography---line-height--1-1: 1.1;
+    --_typography---line-height--1-167: 1.167;
+    --_typography---line-height--1-33: 1.33;
+    --_typography---line-height--1-4: 1.4;
+    --_typography---line-height--1-428: 1.428;
+    --_typography---line-height--1-44: 1.44;
+    --_typography---line-height--1-5: 1.5;
+
+    /* Letter Spacing */
+    --_typography---letter-spacing--3: -0.03em;
+    --_typography---letter-spacing--2: -0.02em;
+    --_typography---letter-spacing--1: -0.01em;
+    --_typography---letter-spacing--0: 0em;
+    --_typography---letter-spacing--0-3: 0.003em;
+    --_typography---letter-spacing--6: 0.06em;
+    --_typography---letter-spacing--8: 0.08em;
+
+    /* Text Transform */
+    --_typography---text-transform--none: none;
+    --_typography---text-transform--uppercase: uppercase;
+    --_typography---text-transform--capitalize: capitalize;
+    --_typography---text-transform--lowercase: lowercase;
+
+    /* ============================================
+       PARAGRAPH STYLES
+       ============================================ */
+    --_paragraph-style---font-family: var(--_typography---body-font--paragraph-family);
+    --_paragraph-style---font-size: var(--_typography---font-size--p-16);
+    --_paragraph-style---line-height: var(--_typography---line-height--1-5);
+    --_paragraph-style---font-weight: var(--_typography---font-weight--weight-400);
+    --_paragraph-style---letter-spacing: var(--_typography---letter-spacing--3);
+    --_paragraph-style---text-transform: var(--_typography---text-transform--none);
+    --_paragraph-style---margin-top: var(--_spacing---space--4);
+    --_paragraph-style---margin-bottom: var(--_spacing---space--4);
+    --_paragraph-style---trim-top: var(--_typography---body-font--body-trim-top);
+    --_paragraph-style---trim-bottom: var(--_typography---body-font--body-trim-bottom);
+
+    /* ============================================
+       HEADING STYLES
+       ============================================ */
+    --_heading-styles---font-family: var(--_typography---heading-font--heading-family);
+    --_heading-styles---font-size: var(--_typography---heading-size--h6);
+    --_heading-styles---line-height: var(--_typography---line-height--1);
+    --_heading-styles---font-weight: var(--_typography---font-weight--weight-400);
+    --_heading-styles---letter-spacing: var(--_typography---letter-spacing--3);
+    --_heading-styles---text-transform: var(--_typography---text-transform--none);
+    --_heading-styles---margin-top: var(--_spacing---space--4);
+    --_heading-styles---margin-bottom: var(--_spacing---space--4);
+    --_heading-styles---trim-top: var(--_typography---heading-font--heading-trim-top);
+    --_heading-styles---trim-bottom: var(--_typography---heading-font--heading-trim-bottom);
+
+    /* ============================================
+       LABEL STYLES
+       ============================================ */
+    --_label-styles---font-family: var(--_typography---heading-font--heading-family);
+    --_label-styles---font-size: var(--_typography---label-size--label-16);
+    --_label-styles---line-height: var(--_typography---line-height--1-5);
+    --_label-styles---font-weight: var(--_typography---font-weight--weight-600);
+    --_label-styles---letter-spacing: var(--_typography---letter-spacing--6);
+    --_label-styles---text-transform: var(--_typography---text-transform--uppercase);
+    --_label-styles---margin-top: var(--_spacing---space--4);
+    --_label-styles---margin-bottom: var(--_spacing---space--4);
+    --_label-styles---trim-top: var(--_typography---accent-font--accent-trim-top);
+    --_label-styles---trim-bottom: var(--_typography---accent-font--accent-trim-bottom);
+
+    /* ============================================
+       LAYOUT SYSTEM
+       ============================================ */
+
+    /* Site Configuration */
+    --site--width: 90rem;
+    --site--column-count: 12;
+    --site--gutter: 1rem;
+
+    /* Containers */
+    --container--main: 90rem;
+    --container--small: 90rem;
+    --container--full: 90rem;
+    --container--large: 80rem;
+    --container--max: 90rem;
+
+    /* Grid Templates */
+    --grid-1: repeat(1, minmax(0, 1fr));
+    --grid-2: repeat(2, minmax(0, 1fr));
+    --grid-3: repeat(3, minmax(0, 1fr));
+    --grid-4: repeat(4, minmax(0, 1fr));
+    --grid-5: repeat(5, minmax(0, 1fr));
+    --grid-6: repeat(6, minmax(0, 1fr));
+    --grid-7: repeat(7, minmax(0, 1fr));
+    --grid-8: repeat(8, minmax(0, 1fr));
+    --grid-9: repeat(9, minmax(0, 1fr));
+    --grid-10: repeat(10, minmax(0, 1fr));
+    --grid-11: repeat(11, minmax(0, 1fr));
+    --grid-12: repeat(12, minmax(0, 1fr));
+
+    /* ============================================
+       THEME SYSTEM (Semantic Tokens)
+       ============================================ */
+
+    /* Background & Foreground */
+    --_themes---background: var(--swatch--light);
+    --_themes---text: var(--swatch--dark);
+
+    /* Primary Actions */
+    --_themes---primary--background: var(--brand--grey-300);
+    --_themes---primary--background-hover: var(--swatch--faded-mid);
+    --_themes---primary--btn-text: var(--swatch--dark);
+    --_themes---primary--btn-hover-text: var(--swatch--dark);
+
+    /* Secondary Actions */
+    --_themes---secondary--background: var(--swatch--faded-mid);
+    --_themes---secondary--background-hover: var(--brand--grey-300);
+    --_themes---secondary--btn-text: var(--swatch--dark);
+    --_themes---secondary--btn-hover-text: var(--swatch--dark);
+
+    /* Tertiary Actions */
+    --_themes---tertiary--background: var(--swatch--transparent);
+    --_themes---tertiary--background-hover: var(--swatch--faded-mid);
+    --_themes---tertiary--btn-text: var(--swatch--dark);
+    --_themes---tertiary--btn-hover-text: var(--swatch--dark);
+
+    /* Navigation */
+    --_themes---nav-text: var(--swatch--dark);
+    --_themes---nav-bkg: #e4e0d83d;
+    --_themes---nav-btn-bkg: #d8d4cae0;
+    --_themes---nav-btn-hover: #d8d4ca66;
+
+    /* ============================================
+       LEGACY SHADCN UI COMPATIBILITY
+       ============================================ */
+
+    /* Backgrounds */
+    --background: var(--swatch--light);
+    --foreground: var(--swatch--dark);
+
+    /* Cards & Popovers */
+    --card: var(--swatch--light);
+    --card-foreground: var(--swatch--dark);
+    --popover: var(--swatch--light);
+    --popover-foreground: var(--swatch--dark);
+
+    /* Primary (Updated to new yellow) */
+    --primary: 50 100% 50%; /* #ffd800 in HSL */
+    --primary-foreground: var(--swatch--dark);
+
+    /* Secondary */
+    --secondary: 40 23% 88%; /* #e5e0d8 in HSL */
+    --secondary-foreground: var(--swatch--dark);
+
+    /* Muted/Subtle */
+    --muted: 40 23% 88%;
+    --muted-foreground: 48 8% 76%;
+
+    /* Accent */
+    --accent: 40 23% 88%;
+    --accent-foreground: var(--swatch--dark);
+
+    /* Destructive/Error */
+    --destructive: 11 86% 55%; /* #f05228 */
+    --destructive-foreground: var(--swatch--light);
+
+    /* Success */
+    --success: 120 52% 42%; /* #32a432 */
+    --success-foreground: var(--swatch--light);
+
+    /* Warning */
+    --warning: 42 100% 50%; /* #ffb300 */
+    --warning-foreground: var(--swatch--dark);
+
+    /* Info */
+    --info: 197 73% 42%; /* #1d8fb9 */
+    --info-foreground: var(--swatch--light);
+
+    /* Borders & Inputs */
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+
+    /* Focus Ring (Updated to new yellow) */
+    --ring: 50 100% 50%;
+
+    /* Alternate Background */
+    --background-alt: 0 20% 95%;
+
+    /* Chart Colors (Updated primary to new yellow) */
+    --chart-1: 50 100% 50%; /* #ffd800 */
+    --chart-2: 197 73% 42%; /* #1d8fb9 */
+    --chart-3: 120 52% 42%; /* #32a432 */
+    --chart-4: 42 100% 50%; /* #ffb300 */
+    --chart-5: 58 100% 60%; /* #fff737 */
+
+    /* Border Radius */
     --radius: 0.5rem;
+
+    /* Font Families (Legacy) */
+    --font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
+    --font-serif: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    --font-decorative: 'Tangerine', cursive;
   }
+
+  /* ============================================
+     DARK MODE THEME
+     ============================================ */
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Background & Foreground (Inverted) */
+    --_themes---background: var(--swatch--dark);
+    --_themes---text: var(--swatch--light);
+
+    /* Primary Actions */
+    --_themes---primary--background: var(--swatch--dark);
+    --_themes---primary--background-hover: var(--swatch--faded-dark);
+    --_themes---primary--btn-text: var(--swatch--light);
+    --_themes---primary--btn-hover-text: var(--swatch--light);
+
+    /* Secondary Actions */
+    --_themes---secondary--background: var(--swatch--faded-dark);
+    --_themes---secondary--background-hover: var(--swatch--dark);
+    --_themes---secondary--btn-text: var(--swatch--light);
+    --_themes---secondary--btn-hover-text: var(--swatch--light);
+
+    /* Tertiary Actions */
+    --_themes---tertiary--background: var(--swatch--transparent);
+    --_themes---tertiary--background-hover: var(--swatch--faded-dark);
+    --_themes---tertiary--btn-text: var(--swatch--light);
+    --_themes---tertiary--btn-hover-text: var(--swatch--light);
+
+    /* Navigation */
+    --_themes---nav-text: var(--swatch--light);
+    --_themes---nav-bkg: var(--swatch--faded-dark);
+    --_themes---nav-btn-bkg: var(--swatch--dark);
+    --_themes---nav-btn-hover: #16160c7a;
+
+    /* Legacy Shadcn Compatibility */
+    --background: var(--swatch--dark);
+    --foreground: var(--swatch--light);
+    --background-alt: 60 20% 10%;
+
+    --card: var(--swatch--dark);
+    --card-foreground: var(--swatch--light);
+    --popover: var(--swatch--dark);
+    --popover-foreground: var(--swatch--light);
+
+    /* Primary (Keep new yellow vibrant) */
+    --primary: 50 100% 50%;
+    --primary-foreground: var(--swatch--dark);
+
+    /* Secondary */
+    --secondary: 60 10% 15%;
+    --secondary-foreground: var(--swatch--light);
+
+    /* Muted */
+    --muted: 60 10% 15%;
+    --muted-foreground: 0 0% 80%;
+
+    /* Accent */
+    --accent: 60 10% 15%;
+    --accent-foreground: var(--swatch--light);
+
+    /* States (Keep vibrant) */
+    --destructive: 11 86% 55%;
+    --destructive-foreground: var(--swatch--light);
+    --success: 120 52% 42%;
+    --success-foreground: var(--swatch--light);
+    --warning: 42 100% 50%;
+    --warning-foreground: var(--swatch--dark);
+    --info: 197 73% 42%;
+    --info-foreground: var(--swatch--light);
+
+    /* Borders (Lighter for visibility) */
+    --border: 60 10% 20%;
+    --input: 60 10% 20%;
+
+    /* Focus Ring */
+    --ring: 50 100% 50%;
+
+    /* Charts (Same as light) */
+    --chart-1: 50 100% 50%;
+    --chart-2: 197 73% 42%;
+    --chart-3: 120 52% 42%;
+    --chart-4: 42 100% 50%;
+    --chart-5: 58 100% 60%;
   }
 }
 
@@ -64,5 +479,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    text-transform: var(--_text-style---text-transform, none);
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--_paragraph-style---font-family);
+    font-size: var(--_paragraph-style---font-size);
+    line-height: var(--_paragraph-style---line-height);
+    font-weight: var(--_paragraph-style---font-weight);
+    letter-spacing: var(--_paragraph-style---letter-spacing);
   }
 }

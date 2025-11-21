@@ -172,6 +172,7 @@ CREATE TABLE events (...);  -- Belongs in separate migration
 
 ### 2. Idempotent Migrations
 
+**Tables:**
 ```sql
 -- ✅ Good: Can run multiple times safely
 CREATE TABLE IF NOT EXISTS cities (...);
@@ -180,7 +181,21 @@ CREATE TABLE IF NOT EXISTS cities (...);
 CREATE TABLE cities (...);  -- ERROR: table already exists
 ```
 
-**Why:** Prevents errors if migration runs twice (e.g., during rollback/retry).
+**RLS Policies:**
+```sql
+-- ✅ Good: Can run multiple times safely
+DROP POLICY IF EXISTS "policy_name" ON table_name;
+CREATE POLICY "policy_name" ON table_name
+  FOR SELECT
+  USING (city_id = auth.current_city());
+
+-- ❌ Bad: Fails if run twice
+CREATE POLICY "policy_name" ON table_name
+  FOR SELECT
+  USING (...);  -- ERROR: policy already exists
+```
+
+**Why:** Prevents errors if migration runs twice (e.g., during rollback/retry or `supabase db reset`).
 
 ---
 

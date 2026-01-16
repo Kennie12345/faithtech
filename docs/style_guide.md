@@ -168,24 +168,38 @@ For components using Shadcn UI conventions:
 | `--border` | `#cdcdcd` | Lighter grey | `border-border` |
 | `--ring` | `#ffd800` | `#ffd800` | `ring-ring` |
 
+### Color Philosophy: Dominant Colors with Sharp Accents
+
+**CRITICAL PRINCIPLE:** Commit to a **cohesive aesthetic** with **dominant colors and sharp accents**. Avoid timid, evenly-distributed palettes. FaithTech's yellow (#ffd800) should dominate key moments, not be scattered equally with other colors.
+
+**Anti-Pattern to Avoid:**
+- ❌ Purple gradients on white backgrounds (generic AI aesthetic)
+- ❌ Evenly balanced color distribution across components
+- ❌ Overusing neutral greys without intentional accent moments
+
+**Recommended Approach:**
+- ✅ Bold yellow backgrounds for primary CTAs and hero moments
+- ✅ Beige as a warm neutral base, not a "safe" default
+- ✅ Strategic accent colors (blue for Create, green for success) used sparingly
+
 ### Color Usage Patterns
 
 #### Buttons
 
 ```tsx
-// Primary CTA (beige background)
-<button className="bg-brand-grey-300 text-swatch-dark hover:bg-swatch-faded-mid">
+// Primary CTA (DOMINANT yellow - use for key actions)
+<button className="bg-brand-yellow-200 text-swatch-dark hover:bg-brand-yellow-100">
   Join Community
 </button>
 
-// Secondary (faded beige)
-<button className="bg-swatch-faded-mid text-swatch-dark hover:bg-brand-grey-300">
+// Secondary (beige background - supporting actions)
+<button className="bg-brand-grey-300 text-swatch-dark hover:bg-swatch-faded-mid">
   Learn More
 </button>
 
-// Accent with yellow
-<button className="bg-brand-yellow-100 text-swatch-dark hover:bg-brand-yellow-200">
-  Get Started
+// Accent (strategic use for branded moments)
+<button className="bg-brand-blue-200 text-swatch-light hover:opacity-90">
+  Explore Create
 </button>
 
 // Using Shadcn conventions
@@ -194,18 +208,29 @@ For components using Shadcn UI conventions:
 </button>
 ```
 
-#### Component Backgrounds
+#### Component Backgrounds: Atmosphere and Depth
+
+**Design Principle:** Create **atmosphere and depth** rather than defaulting to solid colors. Layer gradients, use geometric patterns, or add contextual effects.
 
 ```tsx
-// Card on white background (beige)
-<div className="bg-brand-grey-300 rounded-lg p-space-6">
+// Hero section with layered depth (gradient + pattern)
+<div className="bg-gradient-to-br from-brand-yellow-200 via-brand-yellow-100 to-brand-grey-100 rounded-lg p-space-8">
 
-// Popup/Modal (yellow accent)
-<div className="bg-brand-yellow-100 rounded-lg p-space-5">
+// Card with subtle depth (beige base)
+<div className="bg-brand-grey-300 rounded-lg p-space-6 shadow-sm">
 
-// Subtle background (faded beige)
-<div className="bg-swatch-faded-mid rounded-lg p-space-4">
+// Popup/Modal (BOLD yellow for attention)
+<div className="bg-brand-yellow-100 rounded-lg p-space-5 border-2 border-brand-yellow-200">
+
+// Subtle background layer (faded with transparency)
+<div className="bg-swatch-faded-mid rounded-lg p-space-4 backdrop-blur-sm">
 ```
+
+**Advanced Techniques:**
+- Use `bg-gradient-to-*` with brand colors for depth
+- Add `shadow-*` utilities for elevation
+- Combine `backdrop-blur-*` with `bg-swatch-faded-*` for glass-morphism effects
+- Layer multiple backgrounds using pseudo-elements when needed
 
 ### Color Contrast & Accessibility
 
@@ -224,9 +249,9 @@ All color combinations meet WCAG AA standards:
 
 ## Typography
 
-### Font System
+### Font System Philosophy
 
-The design system uses three font families:
+FaithTech uses **distinctive typography** to create visual hierarchy and brand personality. Avoid defaulting to generic system fonts (Inter, Roboto, Arial) for every use case—instead, leverage high-contrast pairings and weight extremes to create impact.
 
 #### Primary: Noigrotesk / Inter
 
@@ -241,13 +266,17 @@ The design system uses three font families:
 - `font-body` - Inter for body text
 - `font-sans` - Roboto (legacy compatibility)
 
+**Design Principle:** Use **weight extremes** (font-300 vs font-700) and **dramatic size jumps** (3x+ scale, not 1.5x) for hierarchy. Pair Noigrotesk's geometric forms with Inter's neutrality to create contrast.
+
 #### Secondary: Avril / Palatino
 
-**Usage**: Decorative accents, large impactful headings
+**Usage**: Decorative accents, large impactful headings, emotional moments
 
 **CSS Variable:** `--_typography---accent-font--accent-family`
 
 **Tailwind class:** `font-accent`
+
+**Design Principle:** Reserve accent fonts for **high-impact moments** like hero headings or feature callouts. The serif-to-sans contrast creates visual surprise.
 
 ### Responsive Font Sizes
 
@@ -410,6 +439,94 @@ The spacing system uses CSS variables that can adapt:
 | `rounded-radius-round` | `--radius--round` | 100vw (Pill shape) |
 
 Or use standard Tailwind: `rounded-sm`, `rounded-lg`, `rounded-full`
+
+---
+
+## Motion & Animation
+
+### Animation Philosophy: High-Impact Moments
+
+**CRITICAL PRINCIPLE:** Focus on **one well-orchestrated page load** with staggered reveals rather than scattered micro-interactions. Prioritize CSS-only solutions; use animation libraries (like Framer Motion) sparingly for React components.
+
+### CSS-Only Animation Patterns
+
+#### Staggered Reveal on Page Load
+
+```tsx
+// Staggered fade-in for list items
+<div className="space-y-space-4">
+  <div className="animate-fade-in" style={{ animationDelay: '0ms' }}>
+    <Card />
+  </div>
+  <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
+    <Card />
+  </div>
+  <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+    <Card />
+  </div>
+</div>
+
+// Define in CSS (add to globals.css or Tailwind config)
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+```
+
+#### Hover Effects and Micro-Interactions
+
+```tsx
+// Smooth hover with transform (CSS-only)
+<button className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+  Explore
+</button>
+
+// Color shift on hover (use Tailwind transitions)
+<div className="transition-colors duration-200 hover:bg-brand-yellow-200">
+
+// Slide-in effect for drawers/modals
+<div className="animate-slide-in-right">
+  <SidePanel />
+</div>
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+```
+
+### When to Use Animation Libraries (Framer Motion)
+
+Reserve Framer Motion for:
+- Complex gesture-based interactions (drag, swipe)
+- Shared layout animations (element morphing between pages)
+- Orchestrated sequences that require JavaScript state
+
+**Example:**
+```tsx
+import { motion } from 'framer-motion';
+
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.1 }}
+>
+  <Card />
+</motion.div>
+```
+
+### Animation Guidelines
+
+- **Easing:** Use `cubic-bezier(0.16, 1, 0.3, 1)` for smooth, natural motion (avoid linear)
+- **Duration:** 200-400ms for micro-interactions, 500-800ms for page transitions
+- **Stagger Timing:** 50-150ms increments for list reveals (via `animation-delay`)
+- **Performance:** Animate only `opacity`, `transform` (never `width`, `height`, `top`, `left`)
 
 ---
 
@@ -599,14 +716,81 @@ export default function CommunityPage() {
 
 ---
 
+## Avoiding Generic AI Aesthetics
+
+### The "AI Slop" Problem
+
+AI models tend toward **distributional convergence**—defaulting to high-probability patterns seen in training data. This creates recognizable, generic outputs that lack brand personality.
+
+**Common AI Anti-Patterns to AVOID:**
+
+❌ **Typography:**
+- Overused fonts: Inter everywhere, Roboto, Arial, system fonts as default choices
+- Predictable pairings without intentional contrast
+- Uniform font weights (all 400, or all 600)
+
+❌ **Color Schemes:**
+- Purple gradients on white backgrounds (the quintessential AI aesthetic)
+- Evenly distributed palettes with no dominant color
+- Pastel blues and pinks without brand context
+- Overuse of `#667eea` to `#764ba2` gradient (cliché AI purple)
+
+❌ **Layouts:**
+- Cookie-cutter card grids with identical proportions
+- Predictable hero sections (centered text, gradient background, two buttons)
+- Lack of asymmetry or unexpected compositions
+
+❌ **Motion:**
+- No animations at all (static, lifeless)
+- OR scattered micro-interactions without intentional orchestration
+- Generic fade-ins without easing or stagger
+
+### FaithTech's Distinctive Approach
+
+✅ **Typography:**
+- High-contrast pairings: Noigrotesk (geometric sans) + Avril (serif accent)
+- Weight extremes: font-300 vs font-700, not font-400 everywhere
+- Dramatic size jumps: 3x+ scale between heading levels
+
+✅ **Color Philosophy:**
+- **Dominant yellow** (#ffd800) as the brand hero, not timidly scattered
+- Warm beige (#e5e0d8) as neutral base (not cold greys)
+- Sharp, strategic accent colors (blue for Create moments, green for success)
+
+✅ **Layout Principles:**
+- Asymmetric compositions (not everything centered)
+- Varied card sizes and proportions (not uniform grids)
+- Contextual use of space (generous whitespace for impact, tight grouping for density)
+
+✅ **Motion Strategy:**
+- One well-orchestrated page load (staggered reveals with 100ms delays)
+- CSS-only solutions prioritized (performant, accessible)
+- High-impact moments (hero animations) > scattered micro-interactions
+
+### Creative Interpretation: Think Outside the Box
+
+**CRITICAL REMINDER:** Even with explicit guidelines, AI models converge on common choices (e.g., Space Grotesk becoming the new "default"). To combat this:
+
+1. **Vary aesthetic choices** between generations (light vs dark themes, serif vs sans, warm vs cool palettes)
+2. **Make unexpected choices** that feel genuinely designed for context (not algorithmically safe)
+3. **Challenge assumptions**: If your first instinct is Inter + purple gradient, choose something else
+4. **Draw inspiration** from IDE themes (Dracula, Nord, Catppuccin), cultural aesthetics, or artistic movements
+
+---
+
 ## Summary
 
 The FaithTech design system provides a complete toolkit built on:
 
-1. **Yellow-focused branding** (#ffd800, #fff737) with beige (#e5e0d8) for backgrounds
+1. **Distinctive yellow-focused branding** (#ffd800, #fff737) with warm beige (#e5e0d8) for backgrounds
 2. **Three-layer color architecture** for flexibility and consistency
 3. **Fluid responsive sizing** that adapts automatically across devices
 4. **Comprehensive CSS variables** for every design decision
 5. **WCAG AA accessibility** built into every color combination
+6. **High-contrast typography** with weight extremes and dramatic scale
+7. **Orchestrated motion** prioritizing CSS-only staggered reveals
+8. **Atmospheric backgrounds** using gradients and layering (not flat colors)
+
+**Critical Philosophy:** Avoid generic AI aesthetics by committing to bold, distinctive choices. Dominant colors with sharp accents outperform timid palettes. One well-orchestrated page load creates more delight than scattered micro-interactions. Think outside the box—vary your choices, make unexpected decisions, and design for context, not algorithmic safety.
 
 **Remember:** Always use design tokens (CSS variables and Tailwind classes), never hardcode values.

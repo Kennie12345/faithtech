@@ -36,7 +36,7 @@ export default async function EditPostPage({ params }: PageProps) {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           No city context. Please select a city first.
         </div>
@@ -53,7 +53,7 @@ export default async function EditPostPage({ params }: PageProps) {
   // Verify post belongs to current city
   if (post.city_id !== cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Post not found in your city.
         </div>
@@ -68,7 +68,7 @@ export default async function EditPostPage({ params }: PageProps) {
 
   if (!canEdit) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Unauthorized. Only post creator or city admins can edit posts.
         </div>
@@ -79,7 +79,7 @@ export default async function EditPostPage({ params }: PageProps) {
   const isPublished = post.published_at !== null;
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
@@ -89,7 +89,7 @@ export default async function EditPostPage({ params }: PageProps) {
         </Button>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h1 className="text-3xl font-bold">Edit Post</h1>
+            <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Edit Post</h1>
             {post.is_featured && (
               <Badge variant="default">Featured</Badge>
             )}

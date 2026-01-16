@@ -8,9 +8,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getProjects } from '@/features/projects/actions';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { YellowButton, BeigeContentCard, YellowTag, Grid } from '@/components/design-system';
 import { PlusIcon, StarIcon, GithubIcon, ExternalLinkIcon } from 'lucide-react';
 import { ToggleFeaturedButton } from '@/components/projects/ToggleFeaturedButton';
 
@@ -31,7 +29,7 @@ export default async function AdminProjectsPage() {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           No city context. Please select a city first.
         </div>
@@ -42,7 +40,7 @@ export default async function AdminProjectsPage() {
   const userIsAdmin = await isAdmin(cityId);
   if (!userIsAdmin) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Unauthorized. Only city admins can manage projects.
         </div>
@@ -58,21 +56,21 @@ export default async function AdminProjectsPage() {
   const regularProjects = projects.filter((p) => !p.is_featured);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Projects</h1>
+          <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Projects</h1>
           <p className="text-muted-foreground mt-2">
             Manage community projects and showcases
           </p>
         </div>
-        <Button asChild>
+        <YellowButton asChild>
           <Link href="/protected/admin/projects/new">
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon className="mr-space-2 h-4 w-4" />
             Create Project
           </Link>
-        </Button>
+        </YellowButton>
       </div>
 
       {/* Featured Projects */}
@@ -96,13 +94,13 @@ export default async function AdminProjectsPage() {
           All Projects ({projects.length})
         </h2>
         {projects.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
+          <BeigeContentCard>
+            <div className="py-space-4">
               <p className="text-muted-foreground text-center">
                 No projects yet. Create your first project to get started!
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </BeigeContentCard>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {regularProjects.map((project) => (
@@ -123,63 +121,64 @@ function ProjectCard({
   isFeatured?: boolean;
 }) {
   return (
-    <Card className={isFeatured ? 'border-primary' : ''}>
-      <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg line-clamp-1">{project.title}</CardTitle>
-          <ToggleFeaturedButton projectId={project.id} isFeatured={project.is_featured} />
+    <BeigeContentCard className={isFeatured ? 'ring-2 ring-brand-yellow-200' : ''}>
+      <div className="space-y-space-4">
+        <div>
+          <div className="flex items-start justify-between gap-space-2 mb-space-2">
+            <h3 className="font-heading text-h5 font-600 line-clamp-1">{project.title}</h3>
+            <ToggleFeaturedButton projectId={project.id} isFeatured={project.is_featured} />
+          </div>
+          <p className="font-body text-p-14 text-brand-grey-500 line-clamp-2 leading-lh-1-5">
+            {project.description || 'No description'}
+          </p>
         </div>
-        <CardDescription className="line-clamp-2">
-          {project.description || 'No description'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+
         {project.problem_statement && (
-          <div className="text-sm">
-            <span className="font-medium">Problem: </span>
-            <span className="text-muted-foreground line-clamp-2">
+          <div className="font-body text-p-14">
+            <span className="font-500">Problem: </span>
+            <span className="text-brand-grey-500 line-clamp-2">
               {project.problem_statement}
             </span>
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-space-2">
           {project.github_url && (
-            <Button variant="outline" size="sm" asChild>
+            <YellowButton variant="bright" size="sm" asChild>
               <a
                 href={project.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1"
+                className="flex items-center gap-space-1"
               >
                 <GithubIcon className="h-3 w-3" />
                 <span className="sr-only">GitHub</span>
               </a>
-            </Button>
+            </YellowButton>
           )}
           {project.demo_url && (
-            <Button variant="outline" size="sm" asChild>
+            <YellowButton variant="bright" size="sm" asChild>
               <a
                 href={project.demo_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1"
+                className="flex items-center gap-space-1"
               >
                 <ExternalLinkIcon className="h-3 w-3" />
                 Demo
               </a>
-            </Button>
+            </YellowButton>
           )}
         </div>
 
-        <div className="pt-2">
-          <Button asChild variant="outline" className="w-full" size="sm">
+        <div className="pt-space-2">
+          <YellowButton asChild className="w-full" size="sm">
             <Link href={`/protected/admin/projects/${project.id}`}>
               Manage Project
             </Link>
-          </Button>
+          </YellowButton>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </BeigeContentCard>
   );
 }

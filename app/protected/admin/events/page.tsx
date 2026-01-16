@@ -8,9 +8,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getEvents } from '@/features/events/actions';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { YellowButton, BeigeContentCard, BlueLabel, Grid } from '@/components/design-system';
 import { CalendarIcon, MapPinIcon, UsersIcon, PlusIcon } from 'lucide-react';
 
 export default async function AdminEventsPage() {
@@ -30,7 +28,7 @@ export default async function AdminEventsPage() {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           No city context. Please select a city first.
         </div>
@@ -41,7 +39,7 @@ export default async function AdminEventsPage() {
   const userIsAdmin = await isAdmin(cityId);
   if (!userIsAdmin) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Unauthorized. Only city admins can manage events.
         </div>
@@ -58,21 +56,21 @@ export default async function AdminEventsPage() {
   const pastEvents = events.filter((e) => new Date(e.starts_at) < now);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Events</h1>
+          <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Events</h1>
           <p className="text-muted-foreground mt-2">
             Manage events for your community
           </p>
         </div>
-        <Button asChild>
+        <YellowButton asChild>
           <Link href="/protected/admin/events/new">
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon className="mr-space-2 h-4 w-4" />
             Create Event
           </Link>
-        </Button>
+        </YellowButton>
       </div>
 
       {/* Upcoming Events */}
@@ -81,13 +79,13 @@ export default async function AdminEventsPage() {
           Upcoming Events ({upcomingEvents.length})
         </h2>
         {upcomingEvents.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
+          <BeigeContentCard>
+            <div className="py-space-4">
               <p className="text-muted-foreground text-center">
                 No upcoming events. Create your first event to get started!
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </BeigeContentCard>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event) => (
@@ -134,47 +132,50 @@ function EventCard({
   });
 
   return (
-    <Card className={isPast ? 'opacity-60' : ''}>
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-lg">{event.title}</CardTitle>
-          {isPast && <Badge variant="secondary">Past</Badge>}
-        </div>
-        <CardDescription className="line-clamp-2">
-          {event.description || 'No description'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CalendarIcon className="h-4 w-4" />
-          <span>
-            {formattedDate} at {formattedTime}
-          </span>
-        </div>
-
-        {event.location_name && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPinIcon className="h-4 w-4" />
-            <span className="line-clamp-1">{event.location_name}</span>
+    <BeigeContentCard className={isPast ? 'opacity-60' : ''}>
+      <div className="space-y-space-4">
+        <div>
+          <div className="flex items-start justify-between mb-space-2">
+            <h3 className="font-heading text-h5 font-600">{event.title}</h3>
+            {isPast && <BlueLabel size="sm" variant="light">Past</BlueLabel>}
           </div>
-        )}
-
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <UsersIcon className="h-4 w-4" />
-          <span>
-            {event.rsvp_yes_count} attending
-            {event.max_attendees && ` / ${event.max_attendees} max`}
-          </span>
+          <p className="font-body text-p-14 text-brand-grey-500 line-clamp-2 leading-lh-1-5">
+            {event.description || 'No description'}
+          </p>
         </div>
 
-        <div className="pt-2">
-          <Button asChild variant="outline" className="w-full" size="sm">
+        <div className="space-y-space-3">
+          <div className="flex items-center gap-space-2 font-body text-p-14 text-brand-grey-500">
+            <CalendarIcon className="h-4 w-4" />
+            <span>
+              {formattedDate} at {formattedTime}
+            </span>
+          </div>
+
+          {event.location_name && (
+            <div className="flex items-center gap-space-2 font-body text-p-14 text-brand-grey-500">
+              <MapPinIcon className="h-4 w-4" />
+              <span className="line-clamp-1">{event.location_name}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-space-2 font-body text-p-14 text-brand-grey-500">
+            <UsersIcon className="h-4 w-4" />
+            <span>
+              {event.rsvp_yes_count} attending
+              {event.max_attendees && ` / ${event.max_attendees} max`}
+            </span>
+          </div>
+        </div>
+
+        <div className="pt-space-2">
+          <YellowButton asChild className="w-full" size="sm">
             <Link href={`/protected/admin/events/${event.id}`}>
               Manage Event
             </Link>
-          </Button>
+          </YellowButton>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </BeigeContentCard>
   );
 }

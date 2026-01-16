@@ -28,7 +28,7 @@ export default async function NewProjectPage() {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           No city context. Please select a city first.
         </div>
@@ -39,7 +39,7 @@ export default async function NewProjectPage() {
   const userIsAdmin = await isAdmin(cityId);
   if (!userIsAdmin) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Unauthorized. Only city admins can create projects here.
         </div>
@@ -48,7 +48,7 @@ export default async function NewProjectPage() {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
@@ -57,7 +57,7 @@ export default async function NewProjectPage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Create Project</h1>
+          <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Create Project</h1>
           <p className="text-muted-foreground mt-2">
             Showcase a new community project
           </p>

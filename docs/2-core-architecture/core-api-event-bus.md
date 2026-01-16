@@ -8,6 +8,12 @@
 
 ---
 
+> **Implementation Status:**
+> - **CoreAPI**: ✅ Implemented and used for authorization (`isAdmin`, `getCurrentCityId`)
+> - **Event Bus**: ⚠️ Infrastructure exists but **no listeners are registered**. Events are emitted but nobody consumes them. Listeners will be activated when newsletter feature is built.
+
+---
+
 ## Purpose
 
 This document defines how **features communicate with core** and **with each other** without direct coupling.
@@ -573,7 +579,9 @@ test('multiple listeners receive same event', async () => {
 ### Unit 4: Feature Listeners
 - **Files:** `features/*/listeners.ts`
 - **Acceptance Criteria:**
-  - ✅ At least one cross-feature integration (e.g., Blog → Newsletter)
+  - [ ] At least one cross-feature integration (e.g., Blog → Newsletter)
+
+> **Note:** Listener files exist but are empty stubs. Will be implemented when newsletter feature is built.
 
 ---
 

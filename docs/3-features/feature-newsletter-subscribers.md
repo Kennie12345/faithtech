@@ -1,7 +1,8 @@
 # Feature: Newsletter Subscriber Management
 
-**Priority:** Medium (Phase 3)
+**Priority:** Medium (Phase 1 Milestone C)
 **Complexity:** Simple
+**Status:** ✅ IMPLEMENTED
 **Dependencies:** [core/01-data-model.md](../core/01-data-model.md)
 
 ---
@@ -162,6 +163,15 @@ events.on('post:published', async (data) => {
 ## Summary
 
 Newsletter feature provides:
-- ✅ Collect subscriber emails
-- ✅ Export for Mailchimp/email tools
-- ✅ GDPR-friendly unsubscribe
+- Collect subscriber emails via public form
+- Export for Mailchimp/email tools (CSV export)
+- GDPR-friendly unsubscribe with data deletion option
+
+## Implementation
+
+**Migration:** `supabase/migrations/024_create_newsletter_subscribers.sql`
+**Feature Module:** `features/newsletter/`
+**Admin UI:** `/protected/admin/newsletter`
+**Public Pages:** `/[citySlug]/subscribe`, `/[citySlug]/unsubscribe`
+
+> **Implementation Status:** ✅ Complete. All acceptance criteria met.

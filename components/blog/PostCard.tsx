@@ -42,7 +42,7 @@ export function PostCard({ post, isAdminView = false }: PostCardProps) {
                 Featured
               </YellowTag>
             )}
-            <BlueLabel size="sm" variant={isPublished ? 'primary' : 'faded'}>
+            <BlueLabel size="sm" variant={isPublished ? 'dark' : 'light'}>
               {isPublished ? 'Published' : 'Draft'}
             </BlueLabel>
           </div>

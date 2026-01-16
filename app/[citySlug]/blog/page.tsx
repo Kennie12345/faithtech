@@ -33,7 +33,7 @@ export default async function CityBlogPage({ params }: PageProps) {
   return (
     <div className="min-h-screen">
       <Section spacing="lg">
-        <Container size="xlarge">
+        <Container size="large">
           {/* Header */}
           <div className="mb-space-9">
             <h1 className="font-heading text-h1 font-600 mb-space-4 leading-lh-1-1">

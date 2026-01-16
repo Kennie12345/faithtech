@@ -33,7 +33,7 @@ export default async function EditProjectPage({ params }: PageProps) {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           No city context. Please select a city first.
         </div>
@@ -50,7 +50,7 @@ export default async function EditProjectPage({ params }: PageProps) {
   // Verify project belongs to current city
   if (project.city_id !== cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Project not found in your city.
         </div>
@@ -65,7 +65,7 @@ export default async function EditProjectPage({ params }: PageProps) {
 
   if (!canEdit) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
+      <div className="flex-1 w-full flex flex-col gap-space-9">
         <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
           Unauthorized. Only project creator or city admins can edit projects.
         </div>
@@ -74,7 +74,7 @@ export default async function EditProjectPage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
@@ -83,7 +83,7 @@ export default async function EditProjectPage({ params }: PageProps) {
           </Link>
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold">Edit Project</h1>
+          <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Edit Project</h1>
           <p className="text-muted-foreground mt-2">{project.title}</p>
         </div>
         {userIsAdmin && <DeleteProjectButton projectId={project.id} />}

@@ -42,6 +42,8 @@ import {
   CalendarDays,
   Rocket,
   BookOpen,
+  MailIcon,
+  SettingsIcon,
   ArrowLeft,
 } from "lucide-react";
 
@@ -52,45 +54,59 @@ export default function ProtectedLayout({
 }) {
   return (
     <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
+      <div className="flex-1 w-full flex flex-col gap-space-10 items-center">
         {/* Admin Navigation */}
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-6 items-center">
+        <nav className="w-full flex justify-center border-b border-brand-grey-400 h-16">
+          <div className="w-full max-w-5xl flex justify-between items-center p-space-3 px-space-5 font-body text-p-14">
+            <div className="flex gap-space-6 items-center">
               <Link
                 href={"/protected"}
-                className="font-semibold text-base hover:text-primary transition-colors"
+                className="font-heading font-600 text-h6 hover:text-brand-yellow-200 transition-colors"
               >
                 FaithTech Admin
               </Link>
-              <div className="hidden md:flex items-center gap-4 text-sm">
+              <div className="hidden md:flex items-center gap-space-4 text-p-14">
                 <Link
                   href="/protected"
-                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </Link>
                 <Link
                   href="/protected/admin/events"
-                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
                 >
                   <CalendarDays className="h-4 w-4" />
                   Events
                 </Link>
                 <Link
                   href="/protected/admin/projects"
-                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
                 >
                   <Rocket className="h-4 w-4" />
                   Projects
                 </Link>
                 <Link
                   href="/protected/admin/blog"
-                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
                 >
                   <BookOpen className="h-4 w-4" />
                   Blog
+                </Link>
+                <Link
+                  href="/protected/admin/newsletter"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
+                >
+                  <MailIcon className="h-4 w-4" />
+                  Newsletter
+                </Link>
+                <Link
+                  href="/protected/admin/settings"
+                  className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
+                >
+                  <SettingsIcon className="h-4 w-4" />
+                  Settings
                 </Link>
               </div>
             </div>
@@ -99,21 +115,21 @@ export default function ProtectedLayout({
         </nav>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
+        <div className="flex-1 flex flex-col gap-space-10 max-w-5xl p-space-5">
           {children}
         </div>
 
         {/* Footer */}
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
+        <footer className="w-full flex items-center justify-center border-t border-brand-grey-400 mx-auto text-center font-body text-p-12 gap-space-8 py-space-9">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-space-1-5 text-brand-grey-500 hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-3 w-3" />
             Back to Site
           </Link>
           <ThemeSwitcher />
-          <p className="text-muted-foreground">
+          <p className="text-brand-grey-500">
             FaithTech © {new Date().getFullYear()}
           </p>
         </footer>

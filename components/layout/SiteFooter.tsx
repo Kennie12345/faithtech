@@ -185,14 +185,14 @@ export async function SiteFooter({ showNewsletter = true, currentCity }: SiteFoo
             </ul>
           </div>
 
-          {/* Newsletter Column */}
-          {showNewsletter && (
+          {/* Newsletter Column - only show if we have a city context */}
+          {showNewsletter && currentCity && (
             <div className="space-y-space-4">
               <h3 className="font-heading text-h6 font-600">Stay Updated</h3>
               <p className="font-body text-p-14 text-brand-grey-500">
                 Subscribe to our newsletter for community updates.
               </p>
-              <NewsletterSignup cityId={currentCity?.id} />
+              <NewsletterSignup citySlug={currentCity.slug} cityName={currentCity.name} />
             </div>
           )}
         </div>

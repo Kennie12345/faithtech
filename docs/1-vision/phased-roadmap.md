@@ -16,9 +16,11 @@ This roadmap outlines the 3-phase evolution of the FaithTech Regional Hub platfo
 
 ---
 
-## Phase 1: The Foundation Stone ✅ Current Focus
+## Phase 1: The Foundation Stone 🚧 Current Focus
 
 **Goal:** Prove the concept with a working multi-city hub for FaithTech Australia
+
+**Status:** Milestones A & B complete. Milestone C (Polish & Launch) in progress.
 
 ### Phase 1 Milestone A: Core Infrastructure
 - ✅ **Database:** Multi-tenant schema (cities, users, groups)
@@ -39,11 +41,11 @@ This roadmap outlines the 3-phase evolution of the FaithTech Regional Hub platfo
 
 ---
 
-### Phase 1 Milestone C: Polish & Launch
-- ✅ **Newsletter:** Subscribe form, CSV export
-- ✅ **Admin UI:** City settings, feature toggles
-- ✅ **Homepage:** Public-facing hero, featured content
-- ✅ **Deploy:** Production on Vercel + Supabase
+### Phase 1 Milestone C: Polish & Launch 🚧 IN PROGRESS
+- [x] **Newsletter:** Subscribe form, CSV export
+- [x] **Admin UI:** City settings, feature toggles
+- [x] **Homepage:** Public-facing hero, featured content, feature toggles
+- [ ] **Deploy:** Production on Vercel + Supabase
 
 **Deliverable:** 🚀 FaithTech Australia launches with 3+ cities (Adelaide, Sydney, Melbourne)
 

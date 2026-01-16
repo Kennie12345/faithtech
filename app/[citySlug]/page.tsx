@@ -20,11 +20,13 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getCityBySlug, getCityStats } from '@/lib/core/api';
+import { getEnabledFeatures } from '@/features/settings/actions';
 import { HeroSection } from '@/components/homepage/HeroSection';
 import { FeaturedEvents } from '@/components/homepage/FeaturedEvents';
 import { FeaturedProjects } from '@/components/homepage/FeaturedProjects';
 import { LatestPosts } from '@/components/homepage/LatestPosts';
 import { StatsDisplay } from '@/components/homepage/StatsDisplay';
+import { NewsletterSignup } from '@/components/homepage/NewsletterSignup';
 import { YellowButton, BeigeButton, Container, Section } from '@/components/design-system';
 import type { Metadata } from 'next';
 
@@ -67,8 +69,11 @@ export default async function CityPage({ params }: CityPageProps) {
     notFound();
   }
 
-  // Fetch city stats
-  const stats = await getCityStats(city.id);
+  // Fetch city stats and feature toggles in parallel
+  const [stats, features] = await Promise.all([
+    getCityStats(city.id),
+    getEnabledFeatures(city.id),
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -85,14 +90,20 @@ export default async function CityPage({ params }: CityPageProps) {
           overlay={true}
         />
 
-        {/* Featured Events */}
-        <FeaturedEvents citySlug={city.slug} cityId={city.id} limit={3} />
+        {/* Featured Events - only show if events feature is enabled */}
+        {features.events && (
+          <FeaturedEvents citySlug={city.slug} cityId={city.id} limit={3} />
+        )}
 
-        {/* Featured Projects */}
-        <FeaturedProjects citySlug={city.slug} cityId={city.id} limit={3} />
+        {/* Featured Projects - only show if projects feature is enabled */}
+        {features.projects && (
+          <FeaturedProjects citySlug={city.slug} cityId={city.id} limit={3} />
+        )}
 
-        {/* Latest Blog Posts */}
-        <LatestPosts citySlug={city.slug} cityId={city.id} limit={3} />
+        {/* Latest Blog Posts - only show if blog feature is enabled */}
+        {features.blog && (
+          <LatestPosts citySlug={city.slug} cityId={city.id} limit={3} />
+        )}
 
         {/* Community Stats */}
         <Section spacing="lg" className="bg-brand-grey-200">
@@ -117,6 +128,15 @@ export default async function CityPage({ params }: CityPageProps) {
           </Container>
         </Section>
 
+        {/* Newsletter Signup - only show if newsletter feature is enabled */}
+        {features.newsletter && (
+          <Section spacing="lg">
+            <Container size="main">
+              <NewsletterSignup citySlug={city.slug} cityName={city.name} />
+            </Container>
+          </Section>
+        )}
+
         {/* Call-to-Action */}
         <section
           className="py-space-9 md:py-space-10 text-white"
@@ -124,7 +144,7 @@ export default async function CityPage({ params }: CityPageProps) {
             backgroundColor: city.accent_color || 'var(--_brand---brand-yellow--200)',
           }}
         >
-          <Container size="medium" className="text-center">
+          <Container size="main" className="text-center">
             <h2 className="font-heading text-h1 font-500 leading-lh-1-1">
               Join the {city.name} Community
             </h2>

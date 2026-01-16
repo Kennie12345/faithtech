@@ -8,8 +8,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getPosts } from '@/features/blog/actions';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { YellowButton, BeigeContentCard, Grid } from '@/components/design-system';
 import { PlusIcon, FileTextIcon, CheckCircle2Icon } from 'lucide-react';
 import { PostCard } from '@/components/blog/PostCard';
 
@@ -30,10 +29,12 @@ export default async function AdminBlogPage() {
   const cityId = await getCurrentCityId();
   if (!cityId) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
-        <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
-          No city context. Please select a city first.
-        </div>
+      <div className="flex-1 w-full flex flex-col gap-space-9">
+        <BeigeContentCard className="bg-destructive/10 border-destructive/20">
+          <p className="font-body text-p-14 text-destructive">
+            No city context. Please select a city first.
+          </p>
+        </BeigeContentCard>
       </div>
     );
   }
@@ -41,10 +42,12 @@ export default async function AdminBlogPage() {
   const userIsAdmin = await isAdmin(cityId);
   if (!userIsAdmin) {
     return (
-      <div className="flex-1 w-full flex flex-col gap-12">
-        <div className="bg-destructive/10 text-destructive p-3 px-5 rounded-md">
-          Unauthorized. Only city admins can manage blog posts.
-        </div>
+      <div className="flex-1 w-full flex flex-col gap-space-9">
+        <BeigeContentCard className="bg-destructive/10 border-destructive/20">
+          <p className="font-body text-p-14 text-destructive">
+            Unauthorized. Only city admins can manage blog posts.
+          </p>
+        </BeigeContentCard>
       </div>
     );
   }
@@ -57,66 +60,62 @@ export default async function AdminBlogPage() {
   const publishedPosts = allPosts.filter((p) => p.published_at !== null);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
+    <div className="flex-1 w-full flex flex-col gap-space-9">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Blog Posts</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="font-heading text-h2 font-600 leading-lh-1-1">Blog Posts</h1>
+          <p className="font-body text-p-16 text-brand-grey-500 mt-space-2">
             Manage blog posts for your community
           </p>
         </div>
-        <Button asChild>
+        <YellowButton asChild>
           <Link href="/protected/admin/blog/new">
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon className="mr-space-2 h-4 w-4" />
             New Post
           </Link>
-        </Button>
+        </YellowButton>
       </div>
 
       {/* Drafts Section */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-          <FileTextIcon className="h-5 w-5 text-muted-foreground" />
+        <h2 className="font-heading text-h4 font-600 mb-space-4 flex items-center gap-space-2">
+          <FileTextIcon className="h-5 w-5 text-brand-grey-500" />
           Drafts ({draftPosts.length})
         </h2>
         {draftPosts.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-muted-foreground text-center">
-                No drafts. All posts are published.
-              </p>
-            </CardContent>
-          </Card>
+          <BeigeContentCard>
+            <p className="font-body text-p-14 text-brand-grey-500 text-center py-space-4">
+              No drafts. All posts are published.
+            </p>
+          </BeigeContentCard>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Grid cols={1} mdCols={2} lgCols={3} gap="sm">
             {draftPosts.map((post) => (
               <PostCard key={post.id} post={post} isAdminView />
             ))}
-          </div>
+          </Grid>
         )}
       </div>
 
       {/* Published Section */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+        <h2 className="font-heading text-h4 font-600 mb-space-4 flex items-center gap-space-2">
           <CheckCircle2Icon className="h-5 w-5 text-green-600" />
           Published ({publishedPosts.length})
         </h2>
         {publishedPosts.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-muted-foreground text-center">
-                No published posts yet. Create and publish your first post to get started!
-              </p>
-            </CardContent>
-          </Card>
+          <BeigeContentCard>
+            <p className="font-body text-p-14 text-brand-grey-500 text-center py-space-4">
+              No published posts yet. Create and publish your first post to get started!
+            </p>
+          </BeigeContentCard>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Grid cols={1} mdCols={2} lgCols={3} gap="sm">
             {publishedPosts.map((post) => (
               <PostCard key={post.id} post={post} isAdminView />
             ))}
-          </div>
+          </Grid>
         )}
       </div>
     </div>

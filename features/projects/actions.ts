@@ -12,7 +12,6 @@ import { revalidatePath } from 'next/cache';
 import { slugify, generateUniqueSlug } from '@/lib/utils/slugify';
 import type {
   Project,
-  ProjectMember,
   ProjectWithMembers,
   ProjectMemberWithProfile,
   ProjectMemberRole,

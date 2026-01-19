@@ -142,7 +142,7 @@ export async function unsubscribeFromNewsletter(
     // Use service role client
     const supabase = createServiceClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('newsletter_subscribers')
       .update({
         is_active: false,

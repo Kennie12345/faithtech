@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:unit": "vitest run __tests__/unit",
     "test:integration": "vitest run __tests__/integration",

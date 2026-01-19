@@ -15,7 +15,6 @@
 
 import Link from 'next/link';
 import { getUser } from '@/lib/core/api';
-import { AuthButton } from '@/components/auth-button';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { YellowButton, BeigeButton } from '@/components/design-system';

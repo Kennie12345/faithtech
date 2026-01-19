@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { publishPost, unpublishPost } from '@/features/blog/actions';
@@ -19,17 +19,13 @@ interface PublishPostButtonProps {
 export function PublishPostButton({ postId, isPublished }: PublishPostButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
 
   const handleToggle = async () => {
-    setError(null);
-
     const result = isPublished
       ? await unpublishPost(postId)
       : await publishPost(postId);
 
     if (result.error) {
-      setError(result.error);
       alert(`Error: ${result.error}`);
     } else {
       // Refresh to show updated state

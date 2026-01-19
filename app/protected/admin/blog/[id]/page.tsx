@@ -5,7 +5,6 @@
 
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin, getUser } from '@/lib/core/api';
 import { getPost } from '@/features/blog/actions';
 import { PostForm } from '@/components/blog/PostForm';
@@ -24,7 +23,6 @@ interface PageProps {
 
 export default async function EditPostPage({ params }: PageProps) {
   const { id } = await params;
-  const supabase = await createClient();
 
   // Check authentication
   const user = await getUser();

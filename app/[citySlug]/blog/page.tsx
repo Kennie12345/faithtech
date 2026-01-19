@@ -6,7 +6,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getCityBySlug } from '@/lib/core/api';
-import { getPosts, getFeaturedPosts } from '@/features/blog/actions';
+import { getPosts } from '@/features/blog/actions';
 import { BeigeContentCard, YellowTag, BeigeButton, Container, Section, Grid } from '@/components/design-system';
 import { BookOpenIcon, StarIcon, CalendarIcon } from 'lucide-react';
 

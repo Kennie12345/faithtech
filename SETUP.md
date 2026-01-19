@@ -294,17 +294,140 @@ Ready to continue? Next tracks:
 - **Track C: Blog** - Markdown blog with SEO
 - **Track D: Newsletter** - Subscriber management
 
-Or deploy to production:
+---
+
+## Production Deployment
+
+Follow these steps to deploy the FaithTech Regional Hub to production.
+
+### Prerequisites
+
+- A [Supabase](https://supabase.com) account (free tier works)
+- A [Vercel](https://vercel.com) account (free tier works)
+- [Supabase CLI](https://supabase.com/docs/guides/cli) installed
+
+### Step 1: Create Supabase Project
+
+1. Go to [Supabase Dashboard](https://app.supabase.com)
+2. Click "New Project"
+3. Choose your organization and enter:
+   - **Name:** `faithtech-[your-region]` (e.g., `faithtech-australia`)
+   - **Database Password:** Generate a strong password and save it
+   - **Region:** Choose closest to your users
+4. Wait for the project to be created (~2 minutes)
+
+### Step 2: Configure Supabase
+
+1. In your Supabase project, go to **Settings** → **API**
+2. Note these values:
+   - **Project URL** (e.g., `https://xxxxx.supabase.co`)
+   - **anon/public key** (under "Project API keys")
+   - **service_role key** (under "Project API keys" - keep this secret!)
+
+3. Go to **Settings** → **General** and note:
+   - **Reference ID** (e.g., `xxxxx`)
+
+### Step 3: Apply Database Migrations
+
+Connect to your Supabase project and push migrations:
+
 ```bash
-# Connect to Supabase Cloud project
-supabase link --project-ref your-project-ref
+# Link to your Supabase project
+supabase link --project-ref YOUR_PROJECT_REF
 
-# Push migrations
+# Push all migrations
 supabase db push
-
-# Deploy to Vercel
-vercel deploy
 ```
+
+This will create all required tables, RLS policies, and functions.
+
+### Step 4: Configure Authentication
+
+1. In Supabase, go to **Authentication** → **Providers**
+2. Ensure **Email** provider is enabled
+3. (Optional) Configure OAuth providers (Google, GitHub, etc.)
+
+4. Go to **Authentication** → **URL Configuration**
+5. Add your production URL to:
+   - **Site URL:** `https://your-domain.com`
+   - **Redirect URLs:** `https://your-domain.com/**`
+
+### Step 5: Deploy to Vercel
+
+1. Push your code to a GitHub repository
+
+2. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+
+3. Click "Add New..." → "Project"
+
+4. Import your GitHub repository
+
+5. Configure environment variables:
+
+   | Variable | Value |
+   |----------|-------|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase Project URL |
+   | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Your Supabase anon/public key |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Your Supabase service_role key |
+
+6. Click "Deploy"
+
+### Step 6: Configure Custom Domain (Optional)
+
+1. In Vercel, go to your project → **Settings** → **Domains**
+2. Add your custom domain
+3. Follow DNS configuration instructions
+4. Update Supabase redirect URLs with your custom domain
+
+### Step 7: Seed Initial Data
+
+After deployment, you'll need to create initial cities and admin users:
+
+1. Go to Supabase **SQL Editor**
+2. Run migration 020 manually if cities weren't seeded:
+
+```sql
+-- Check if cities exist
+SELECT * FROM cities;
+```
+
+3. Create your first admin user:
+   - Sign up through the app at `/auth/sign-up`
+   - In Supabase **SQL Editor**, assign admin role:
+
+```sql
+-- Get the user ID from auth.users
+SELECT id, email FROM auth.users;
+
+-- Create profile
+INSERT INTO profiles (id, display_name)
+VALUES ('USER_ID_HERE', 'Admin Name');
+
+-- Assign as city admin
+INSERT INTO user_city_roles (user_id, city_id, role)
+SELECT 'USER_ID_HERE', id, 'city_admin'
+FROM cities
+WHERE slug = 'YOUR_CITY_SLUG';
+```
+
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | Supabase anon key (public) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role key (for newsletter) |
+
+### Post-Deployment Checklist
+
+- [ ] Verify authentication flow works (sign up, login, logout)
+- [ ] Verify admin can create events, projects, blog posts
+- [ ] Verify public pages display content correctly
+- [ ] Verify newsletter subscription works
+- [ ] Configure email templates in Supabase (optional)
+- [ ] Set up monitoring and error tracking (optional)
+
+---
 
 ## Useful Commands
 

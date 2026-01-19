@@ -51,7 +51,6 @@ async function seedTestData() {
   const adelaide = cities.find(c => c.slug === 'adelaide')
   const sydney = cities.find(c => c.slug === 'sydney')
   const melbourne = cities.find(c => c.slug === 'melbourne')
-  const brisbane = cities.find(c => c.slug === 'brisbane')
 
   if (!adelaide || !sydney || !melbourne) {
     console.error('❌ Missing required cities')
@@ -267,12 +266,6 @@ async function seedTestData() {
   }
 
   console.log('\n✨ Verifying seed data...\n')
-
-  // Verify counts
-  const { data: eventCount } = await supabase.from('events').select('id', { count: 'exact', head: true })
-  const { data: projectCount } = await supabase.from('projects').select('id', { count: 'exact', head: true })
-  const { data: postCount } = await supabase.from('posts').select('id', { count: 'exact', head: true })
-  const { data: groupCount } = await supabase.from('groups').select('id', { count: 'exact', head: true })
 
   console.log(`✅ Events: ${events.length} seeded`)
   console.log(`✅ Projects: ${projects.length} seeded (all with images)`)

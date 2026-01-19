@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getProjects } from '@/features/projects/actions';
-import { YellowButton, BeigeContentCard, YellowTag, Grid } from '@/components/design-system';
+import { YellowButton, BeigeContentCard } from '@/components/design-system';
 import { PlusIcon, StarIcon, GithubIcon, ExternalLinkIcon } from 'lucide-react';
 import { ToggleFeaturedButton } from '@/components/projects/ToggleFeaturedButton';
 

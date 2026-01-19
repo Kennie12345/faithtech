@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getSubscribers } from '@/features/newsletter/actions';
 import { BeigeContentCard, Grid } from '@/components/design-system';
-import { MailIcon, UsersIcon, DownloadIcon, UserXIcon, UserCheckIcon } from 'lucide-react';
+import { MailIcon, UsersIcon, UserXIcon, UserCheckIcon } from 'lucide-react';
 import { ExportButton } from './ExportButton';
 import { SubscriberRow } from './SubscriberRow';
 

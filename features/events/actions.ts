@@ -9,10 +9,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getUser, getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { emitEvent } from '@/lib/core/events';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { slugify, generateUniqueSlug } from '@/lib/utils/slugify';
 import type {
-  Event,
   EventRSVP,
   EventWithCounts,
   EventRSVPWithProfile,
@@ -477,7 +475,7 @@ export async function rsvpToEvent(
   }
 
   // Upsert RSVP
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('event_rsvps')
     .upsert(
       {

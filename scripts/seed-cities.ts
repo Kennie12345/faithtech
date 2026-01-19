@@ -62,7 +62,7 @@ async function seedCities() {
 
   for (const city of cities) {
     // Use upsert to handle both insert and update
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('cities')
       .upsert(city, {
         onConflict: 'id',

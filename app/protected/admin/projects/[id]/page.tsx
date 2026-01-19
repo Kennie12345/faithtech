@@ -5,7 +5,6 @@
 
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin, getUser } from '@/lib/core/api';
 import { getProject } from '@/features/projects/actions';
 import { ProjectForm } from '@/components/projects/ProjectForm';
@@ -21,7 +20,6 @@ interface PageProps {
 
 export default async function EditProjectPage({ params }: PageProps) {
   const { id } = await params;
-  const supabase = await createClient();
 
   // Check authentication
   const user = await getUser();

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
 import { getEvents } from '@/features/events/actions';
-import { YellowButton, BeigeContentCard, BlueLabel, Grid } from '@/components/design-system';
+import { YellowButton, BeigeContentCard, BlueLabel } from '@/components/design-system';
 import { CalendarIcon, MapPinIcon, UsersIcon, PlusIcon } from 'lucide-react';
 
 export default async function AdminEventsPage() {

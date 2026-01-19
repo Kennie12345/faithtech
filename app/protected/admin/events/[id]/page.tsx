@@ -7,12 +7,11 @@ import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentCityId, isAdmin } from '@/lib/core/api';
-import { getEvent, getEventRSVPs, deleteEvent } from '@/features/events/actions';
+import { getEvent, getEventRSVPs } from '@/features/events/actions';
 import { EventForm } from '@/components/events/EventForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowLeftIcon, UsersIcon, CheckIcon, XIcon, HelpCircleIcon } from 'lucide-react';
+import { ArrowLeftIcon, CheckIcon, XIcon, HelpCircleIcon } from 'lucide-react';
 import { DeleteEventButton } from '@/components/events/DeleteEventButton';
 
 interface PageProps {
